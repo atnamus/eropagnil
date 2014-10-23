@@ -22,7 +22,7 @@ $(document).ready(function() {
     $("#publish_correction").click(function(e) {
         $("#correction_form").trigger('submit');
     });
-    
+
     $("#update_form").submit(function(event) {
         event.preventDefault();
         show_js_loader(true);
@@ -105,13 +105,34 @@ $(document).ready(function() {
         var str = '<span id="perfect_sentence_1" class="perfect_sentence draft_correct">This sentence is perfect! No correction needed!</span>';
         str += '<a id="remove_new_string_link_1" class="remove_new_string_link" title="delete this correction" style="display: inline;">X</a>';
         $(this).closest(".intro_line").find(".perfect_sentence_panel").html(str);
-        $(this).closest(".intro_line").attr("data-perfect","1");
+        $(this).closest(".intro_line").attr("data-perfect", "1");
+        $(this).closest(".intro_line").find(".line_perfect_input").val("1");
         $(this).hide();
     });
-    
-    $(document).on("click",".remove_new_string_link",function(e){
-        $(this).closest(".intro_line").attr("data-perfect","0");
+
+    $(document).on("click", ".remove_new_string_link", function(e) {
+        $(this).closest(".intro_line").attr("data-perfect", "0");
+        $(this).closest(".intro_line").find(".line_perfect_input").val("0");
         $(this).closest(".perfect_sentence_panel").html("");
     });
-    
+
+    $("#post_correction").click(function(e) {
+        e.preventDefault();
+        show_js_loader(true);
+        $.ajax({
+            url: full_path + '/ajax-post-correction-comment',
+            type: 'POST',
+            dataType: 'json',
+            data: $("#correction_comment_form").serialize(),
+            success: function(response) {
+                show_js_loader(false);
+                if (response.status == "success") {
+                    window.location.reload();
+                } else if (response.status == "error") {
+                    showJsError(response.message);
+                }
+            }
+        });
+    });
+
 });

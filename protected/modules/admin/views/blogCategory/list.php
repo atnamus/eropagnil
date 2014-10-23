@@ -1,6 +1,7 @@
-<?php		$this->breadcrumbs=array(
-	'Blog Categories'=>array('index'),
-	'Manage',
+<?php
+$this->breadcrumbs = array(
+    'Blog Categories' => array('index'),
+    'Manage',
 );
 ?><div>
     <h1 style="display: inline">Manage Blog Categories</h1>
@@ -19,25 +20,27 @@
             </div>
             <div class="portlet-body">
                 <div class="table-scrollable">
-                    <?php $gridColumns = array(['name' => 'id','header' => 'Id', 'htmlOptions' => []],
-['name' => 'name','header' => 'Name', 'htmlOptions' => []],
-['name' => 'slug','header' => 'Slug', 'htmlOptions' => []],
-['name' => 'status','type'=>'raw','value'=>'$data->statusTag()', 'header' => 'Status', 'htmlOptions' => [],'sortable' => false],
-array(
-                    'htmlOptions' => array('nowrap' => 'nowrap'),
-                    'class' => 'booster.widgets.TbButtonColumn',
-                    //'template' => '{view}{update}{delete}' //removed {view}
-                    //'viewButtonUrl' => null,//explicitly define url
-                    //'updateButtonUrl' => null,
-                    //'deleteButtonUrl' => null,
-                    )
-                    );                    $this->widget('booster.widgets.TbGridView', array(
-                    'id'=>'blog-category-grid',
-                    'dataProvider'=>$model->search(),
-                    'template' => "{items}",
-                    'enableSorting' => false,
-                    //'filter'=>$model,
-                    'columns'=>$gridColumns));
+                    <?php
+                    $gridColumns = array(['name' => 'id', 'header' => 'Id', 'htmlOptions' => []],
+                        ['name' => 'name', 'header' => 'Name', 'htmlOptions' => []],
+                        ['name' => 'slug', 'header' => 'Slug', 'htmlOptions' => []],
+                        ['name' => 'status', 'type' => 'raw', 'value' => '$data->statusTag()', 'header' => 'Status', 'htmlOptions' => [], 'sortable' => false],
+                        array(
+                            'htmlOptions' => array('nowrap' => 'nowrap'),
+                            'class' => 'booster.widgets.TbButtonColumn',
+                        'template' => '{update}&nbsp;{delete}' //removed {view}
+                        //'viewButtonUrl' => null,//explicitly define url
+                        //'updateButtonUrl' => null,
+                        //'deleteButtonUrl' => null,
+                        )
+                    );
+                    $this->widget('booster.widgets.TbGridView', array(
+                        'id' => 'blog-category-grid',
+                        'dataProvider' => $model->search(),
+                        'template' => "{items}",
+                        'enableSorting' => false,
+                        //'filter'=>$model,
+                        'columns' => $gridColumns));
                     ?>
                 </div>
             </div>

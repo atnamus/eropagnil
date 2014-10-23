@@ -154,7 +154,7 @@
                                 <div class="correct_sentence_title intro_line" data-perfect='0' data-index="<?php echo $i; ?>">
                                     <span class="sentence"><?php echo $line; ?></span>
                                     <input type="hidden" name="main_line[]" value="<?php echo $line; ?>" />
-                                    <input type="hidden" name="line_perfect[]" value="0" />
+                                    <input type="hidden" class="line_perfect_input" name="line_perfect[]" value="0" />
                                     <div class="button_group_box correction_edit_link">
                                         <a href="#" class="btn btn-correct">Correct</a>
                                         <a href="#" class="btn btn-perfect">Perfect</a>
@@ -189,7 +189,7 @@
                                         <a href="#" class="user_name"><?php echo $this->full_name; ?></a>
                                         <span class="pull-right gray_text"><?php echo date("M d, Y h:i"); ?></span>
                                     </div>
-                                    <textarea class="form-control" id="" name="" rows="5" placeholder="Write a comment"></textarea>
+                                    <textarea class="form-control" id="main_comment_box" name="comment_box" rows="5" placeholder="Write a comment"></textarea>
                                 </div>
                                 <div class="button_group_box text-center">
                                     <a href="javascript:void(0)" id="post_correction" class="com-cor-btn">Post corrections</a>

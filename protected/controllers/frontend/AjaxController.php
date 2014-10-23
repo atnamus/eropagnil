@@ -948,6 +948,22 @@ class AjaxController extends FrontController {
             echo json_encode($data_msg);
         }
     }
+    
+    public function actionAjaxpostcorrectioncomment(){
+        $request=Yii::app()->request;
+        if($request->isAjaxRequest){
+            $data_msg=array();
+            
+            $main_lines=$request->getPost("main_line");
+            
+            foreach($main_lines as $key=>$val){
+                
+            }
+            exit;
+            
+            echo json_encode($data_msg);
+        }
+    }
 
     /**
      * Performs the AJAX validation.
