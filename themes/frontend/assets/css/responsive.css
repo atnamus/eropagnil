@@ -1,0 +1,57 @@
+/* Large desktop */
+@media (min-width: 1200px) { 
+
+ }
+ @media (min-width: 1025px) and (max-width: 1200px) { 
+.education h2{	font-size: 24px;}
+
+}
+@media (min-width: 980px) and (max-width: 1024px) { 
+.education h2{	font-size: 18px; font-weight: 700; line-height: 43px; margin-bottom: 15px;}
+.education h2 i{width: 43px; height: 43px; line-height: 43px;}
+.education h2 i:before{width: 43px; height: 43px;}
+
+
+}
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) { 
+.education h2{	font-size: 18px; font-weight: 700; line-height: 43px; margin-bottom: 15px;}
+.education h2 i{width: 43px; height: 43px; line-height: 43px;}
+.education h2 i:before{width: 43px; height: 43px;}
+
+.buttom-section span{margin-bottom: 20px;}
+
+ }
+ 
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) { 
+
+}
+ 
+/* Landscape phones and down */
+@media (max-width: 480px) { 
+.navbar{text-align: center;}
+.navbar-brand{float: none; display: inline-block;}
+
+.select-box{padding-top: 0; float: none; margin: 0 auto;}
+.navbar-sign{padding: 10px 0 25px; width: 100%;}
+
+.get-started{ font-size: 16px; line-height: 28px; padding:0 15px; margin-left: -52px; bottom: 10px;}
+.get-started:before{display: none;}
+
+.gamificationt h1{font-size: 27px; margin-bottom: 30px;}
+.education{text-align: center;}
+.education h2{	font-size: 19px; font-weight: 700; line-height: 43px; margin-bottom: 15px;}
+.education h2 i{width: 43px; height: 43px; line-height: 43px;}
+.education h2 i:before{width: 43px; height: 43px;}
+.owl-pic{ padding: 20px 0;}
+
+.buttom-section span{margin-bottom: 20px;}
+
+.footer-nav{text-align: center;}
+.footer-nav li{ padding: 0 10px;}
+.copy-right{float: none; text-align: center;}
+
+
+
+ }

@@ -1,0 +1,15 @@
+/assets/
+/uploads/images/blog_pic/
+/uploads/images/profile_pic/
+/uploads/lesson/audio/
+/uploads/lesson/image/
+/uploads/lesson/video/
+/themes/admin/assets/icon/
+/themes/admin/assets/global/plugins/
+/themes/admin/assets/global/img/
+/themes/admin/assets/global/css/
+/themes/admin/assets/admin/
+/themes/admin/layout/img/
+/themes/admin/layout/css/
+/protected/runtime/
+/protected/extensions/
