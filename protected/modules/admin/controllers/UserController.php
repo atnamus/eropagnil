@@ -44,8 +44,7 @@ class UserController extends AdminController {
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
     public function actionCreate() {
-        $model = new User;
-
+        $model = new AdUser;
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
 
@@ -54,8 +53,8 @@ class UserController extends AdminController {
             $model->scenario = 'create';
             if ($model->save()) {
                 Yii::app()->user->setFlash('success_msg', "User created successfully");
-              //  $this->redirect(array('update', 'id' => $model->id));
-             $this->redirect(array('Index'));
+                //  $this->redirect(array('update', 'id' => $model->id));
+                $this->redirect(array('Index'));
             }
         }
 
@@ -71,10 +70,6 @@ class UserController extends AdminController {
      */
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
-
-// Uncomment the following line if AJAX validation is needed
-// $this->performAjaxValidation($model);
-
         if (isset($_POST['User'])) {
             $model->attributes = $_POST['User'];
             $model->scenario = 'update';
@@ -126,7 +121,7 @@ class UserController extends AdminController {
      * @throws CHttpException
      */
     public function loadModel($id) {
-        $model = User::model()->findByPk($id);
+        $model = AdUser::model()->findByPk($id);
         if ($model === null)
             throw new CHttpException(404, 'The requested page does not exist.');
         return $model;

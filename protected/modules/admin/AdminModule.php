@@ -16,8 +16,8 @@ class AdminModule extends CWebModule {
         // you may place code here to customize the module or the application
         // import the module-level models and components
         $this->setImport(array(
-            'application.models.*',
             'admin.models.*',
+            //'application.models.*',
             'admin.components.*',
             'ext.YiiMailer.YiiMailer',
         ));

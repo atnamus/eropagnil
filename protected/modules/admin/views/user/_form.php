@@ -54,17 +54,10 @@ if ($model->birthday == '0000-00-00')
         </div>
     </div>
     <div class="form-group">
-        <label class="col-md-3 control-label">First Name</label>
+        <label class="col-md-3 control-label">Full Name</label>
         <div class="col-md-9">
-            <?php echo $form->textField($model, 'first_name', array('size' => 60, 'maxlength' => 100, 'class' => 'form-control', 'id' => '{first_name}', 'placeholder' => 'First Name')); ?>
-            <?php echo $form->error($model, 'first_name'); ?>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-3 control-label">Last Name</label>
-        <div class="col-md-9">
-            <?php echo $form->textField($model, 'last_name', array('size' => 60, 'maxlength' => 100, 'class' => 'form-control', 'id' => '{last_name}', 'placeholder' => 'Last Name')); ?>
-            <?php echo $form->error($model, 'last_name'); ?>
+            <?php echo $form->textField($model, 'full_name', array('size' => 60, 'maxlength' => 100, 'class' => 'form-control', 'id' => '{full_name}', 'placeholder' => 'Full Name')); ?>
+            <?php echo $form->error($model, 'full_name'); ?>
         </div>
     </div>
     <div class="form-group">
@@ -93,7 +86,8 @@ if ($model->birthday == '0000-00-00')
                     <?php echo $form->radioButton($model, "gender", ["value" => 1, 'uncheckValue' => null]) ?> Male
                 </label>
                 <label class="radio-inline">
-                    <?php echo $form->radioButton($model, "gender", ["value" => 2, 'uncheckValue' => null]) ?>Female</label>
+                    <?php echo $form->radioButton($model, "gender", ["value" => 2, 'uncheckValue' => null]) ?>Female
+                </label>
             </div>
             <?php echo $form->error($model, 'gender'); ?>
         </div>

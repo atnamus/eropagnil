@@ -966,14 +966,9 @@ class AjaxController extends FrontController {
             if ($comment->validate()) {
                 
                 $comment->save();
-
+                
                 $comment_id = $comment->id;
-
-                echo "<pre>";
-                echo print_r($comment);
-                echo "</pre>";
-                exit;
-
+                
                 $main_lines = $request->getPost("main_line");
                 $corrected_line = $request->getPost("corrected_line");
                 $line_perfect = $request->getPost("line_perfect");
@@ -986,7 +981,7 @@ class AjaxController extends FrontController {
                     $user_correction->comment_id = $comment_id;
                     $user_correction->main_line = $val;
                     $user_correction->corrected_line = $corrected_line[$key];
-                    $user_correction->correction_id = $corrected_line;
+                    $user_correction->correction_id = $correction_id;
                     $user_correction->correction_type = $line_perfect[$key];
                     $user_correction->user_id = $this->user_id;
                     $user_correction->comment = $correction_comment[$key];

@@ -9,8 +9,6 @@
  * @property string $email
  * @property string $user_type_id
  * @property string $password
- * @property string $first_name
- * @property string $last_name
  * @property string $full_name
  * @property string $birthday
  * @property integer $gender
@@ -19,23 +17,22 @@
  * @property integer $sound_effect
  * @property integer $microphone
  * @property integer $speaker
- * @property integer $membership_id
- * @property string $facebook_url
- * @property string $twitter_url
- * @property string $gplus_url
  * @property string $activation_code
  * @property string $reset_key
  * @property string $status
  * @property string $create_at
  * @property string $update_at
+ *
+ * The followings are the available model relations:
+ * @property UserType $userType
  */
-class User extends AdminModel {
+class User extends CActiveRecord {
 
-//will hold the encrypted password for update actions.
-    public $initialPassword;
+    const ACTIVE = 1;
+    const INACTIVE = 0;
 
-    const STATUS_ACTIVE = 1;
-    const STATUS_INACTIVE = 0;
+    public $confirm_password;
+    public $tmp_scenario;
 
     /**
      * Returns the static model of the specified AR class.
@@ -57,36 +54,29 @@ class User extends AdminModel {
      * @return array validation rules for model attributes.
      */
     public function rules() {
-// NOTE: you should only define rules for those attributes that
-// will receive user inputs.
+        // NOTE: you should only define rules for those attributes that
+        // will receive user inputs.
         return array(
-            array('username,email,user_type_id,first_name,gender,language_id, membership_id,status', 'required'),
-            array('password','required', 'on' => 'create'),                   
-            array('gender, sound_effect, microphone, speaker, membership_id', 'numerical', 'integerOnly' => true),
-             array('gender', 'required','on'=>'update','message' => '{attribute} is required.'),    
+            array('gender,language_id', 'required', 'on' => 'settings_update'),
+            array('username, email,password', 'required', 'on' => 'signup'),
+//            array('email', 'email','message'=>"Invalid email address", 'on' => 'signup'),
+            array('full_name,username, email,password,confirm_password,user_type_id, birthday, gender, language_id, profile_image, membership_id, activation_code, reset_key, create_at, update_at', 'required', 'on' => 'other'),
+            array('username', 'checkUserName', 'on' => 'signup'),
+            array('email', 'email', 'on' => 'signup'),
+            array('email', 'checkEmail', 'on' => 'signup'),
+//            array('password', 'compare', 'compareAttribute' => 'confirm_password', 'message' => 'Password and Confirm Password must be same', 'on' => 'signup'),
+            array('gender, sound_effect, microphone, speaker', 'numerical', 'integerOnly' => true),
             array('username', 'length', 'max' => 50),
-            array('birthday', 'date', 'format' => 'yyyy-m-d'),
-            array('email', 'length', 'max' => 128),
-            array('password', 'length', 'min' => 6, 'max' => 32),
-            array('email', 'email', 'message' => 'This is not a valid {attribute} address.'),
-            array('email', 'unique'),
-            array('username', 'unique'),
+            array('email, password', 'length', 'max' => 128),
             array('user_type_id', 'length', 'max' => 10),
             array('first_name, last_name, profile_image', 'length', 'max' => 100),
             array('language_id', 'length', 'max' => 3),
             array('activation_code', 'length', 'max' => 255),
             array('reset_key', 'length', 'max' => 40),
             array('status', 'length', 'max' => 8),
-            array('facebook_url, twitter_url, gplus_url', 'url'),
-            //exit in reference table
-            array('user_type_id', 'exist', 'attributeName' => 'id', 'className' => 'UserType', "message" => "Invalid data"),
-            array('language_id', 'exist', 'attributeName' => 'id', 'className' => 'Languages', "message" => "Invalid data"),
-            array('email', 'email'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('id, username, email, user_type_id, password, first_name, last_name, birthday, gender, language_id, profile_image, sound_effect, microphone, speaker, membership_id, facebook_url, twitter_url, gplus_url, activation_code, reset_key, status, create_at, update_at', 'safe', 'on' => 'search'),
-            array('username, email, user_type_id, password, first_name, last_name, birthday, gender, language_id, profile_image, sound_effect, microphone, speaker, membership_id, facebook_url, twitter_url, gplus_url, activation_code, reset_key, status, create_at, update_at', 'safe', 'on' => 'update'),
-            array('username, email, user_type_id, password, first_name, last_name, birthday, gender, language_id, profile_image, sound_effect, microphone, speaker, membership_id, facebook_url, twitter_url, gplus_url, activation_code, reset_key, status, create_at, update_at', 'safe', 'on' => 'create'),
+            array('id, username, email, user_type_id, password, full_name, birthday, gender, language_id, profile_image, sound_effect, microphone, speaker, activation_code, reset_key, status, create_at, update_at', 'safe', 'on' => 'search'),
         );
     }
 
@@ -94,10 +84,35 @@ class User extends AdminModel {
      * @return array relational rules.
      */
     public function relations() {
-// NOTE: you may need to adjust the relation name and the related
-// class name for the relations automatically generated below.
+        // NOTE: you may need to adjust the relation name and the related
+        // class name for the relations automatically generated below.
         return array(
-        );
+            'userType' => array(self::BELONGS_TO, 'UserType', 'UserTypeId'),
+             'blogcomments' => array(self::HAS_MANY, 'BlogComment', 'author_id'),
+            'blogCommentCount'=>array(self::STAT, 'BlogComment', 'author_id','condition'=>'status='.BlogComment::STATUS_PUBLISHED)); 
+        
+    }
+
+    public function checkEmail($attribute, $params) {
+        $criteria = new CDbCriteria();
+        $criteria->addCondition("t.email='" . $this->email . "'");
+
+        $data = User::model()->findAll($criteria);
+
+        if (!empty($data)) {
+            $this->addError($attribute, 'Email address already registered');
+        }
+    }
+
+    public function checkUserName($attribute, $params) {
+        $criteria = new CDbCriteria();
+        $criteria->addCondition("t.username='" . $this->username . "'");
+
+        $data = User::model()->findAll($criteria);
+
+        if (!empty($data)) {
+            $this->addError($attribute, 'Username already taken');
+        }
     }
 
     /**
@@ -110,6 +125,7 @@ class User extends AdminModel {
             'email' => 'Email',
             'user_type_id' => 'User Type',
             'password' => 'Password',
+            'full_name' => 'Full Name',
             'first_name' => 'First Name',
             'last_name' => 'Last Name',
             'birthday' => 'Birthday',
@@ -120,11 +136,11 @@ class User extends AdminModel {
             'microphone' => 'Microphone',
             'speaker' => 'Speaker',
             'membership_id' => 'Membership',
-            'facebook_url' => 'Facebook Url',
-            'twitter_url' => 'Twitter Url',
-            'gplus_url' => 'Gplus Url',
             'activation_code' => 'Activation Code',
             'reset_key' => 'Reset Key',
+            'facebook_url' => 'Facebook',
+            'twitter_url' => 'Twitter',
+            'gplus_url' => 'Google Plus',
             'status' => 'Status',
             'create_at' => 'Create At',
             'update_at' => 'Update At',
@@ -136,8 +152,8 @@ class User extends AdminModel {
      * @return CActiveDataProvider the data provider that can return the models based on the search/filter conditions.
      */
     public function search() {
-// Warning: Please modify the following code to remove attributes that
-// should not be searched.
+        // Warning: Please modify the following code to remove attributes that
+        // should not be searched.
 
         $criteria = new CDbCriteria;
 
@@ -155,10 +171,6 @@ class User extends AdminModel {
         $criteria->compare('sound_effect', $this->sound_effect);
         $criteria->compare('microphone', $this->microphone);
         $criteria->compare('speaker', $this->speaker);
-        $criteria->compare('membership_id', $this->membership_id);
-        $criteria->compare('facebook_url', $this->facebook_url, true);
-        $criteria->compare('twitter_url', $this->twitter_url, true);
-        $criteria->compare('gplus_url', $this->gplus_url, true);
         $criteria->compare('activation_code', $this->activation_code, true);
         $criteria->compare('reset_key', $this->reset_key, true);
         $criteria->compare('status', $this->status, true);
@@ -170,20 +182,15 @@ class User extends AdminModel {
         ));
     }
 
-    public function afterFind() {
-        //reset the password to null because we don't want the hash to be shown.
-        $this->initialPassword = $this->password;
-        $this->password = null;
-        parent::afterFind();
+    public function getFullName() {
+        return $this->first_name . " " . $this->last_name;
     }
 
-    public function beforeSave() {
-        if (!empty($this->password)) {
-            $this->password = md5($this->password);
-        } else {
-            $this->password = $this->initialPassword;
+    public function getProfileImgUrl() {
+        if ($this->profile_image == '') {
+            $this->profile_image = 'default-avatar.jpg';
         }
-        return parent::beforeSave();
+        return Yii::app()->createAbsoluteUrl('/uploads/images/profile_pic/' . $this->profile_image);
     }
 
 }
