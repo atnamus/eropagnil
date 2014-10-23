@@ -134,6 +134,7 @@
                     </div>
                     <div class="correct_comment">
                         <form action="" method="post" id="correction_comment_form" enctype="multipart/form-data">
+                            <input type="hidden" name="correction_id" value="<?php echo $cor_dtls->id; ?>" />
                             <div class="comment_heading">
                                 <h3 class="pull-left">Post comments and corrections</h3>
                                 <div class="pull-right button_group_box">
@@ -160,15 +161,16 @@
                                         <a href="#" class="btn btn-perfect">Perfect</a>
                                     </div>
                                     <div class="perfect_sentence_panel" id="perfect_sentence_panel_<?php echo $i; ?>">
-
+                                        
                                     </div>
                                     <div class="correction_panel editor_panel" id="correct_editor_panel<?php echo $i; ?>">
                                         <div class="form-group">
-                                            <img src="<?php echo $this->image_path; ?>/text-editor.png" alt="">
+                                            <!--<img src="<?php // echo $this->image_path; ?>/text-editor.png" alt="">-->
+                                            <textarea name="corrected_line" class="corrected_line"><?php echo $line; ?></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="">Add a description or comment here.(Optional)</label>
-                                            <input type="text" class="form-control" id="" placeholder="">
+                                            <input type="text" class="form-control correction_comment" name="correction_comment[]" id="" placeholder="">
                                         </div>
                                         <div class="btn-group btn-group-sm">
                                             <button type="button" class="btn btn-default">Preview</button>

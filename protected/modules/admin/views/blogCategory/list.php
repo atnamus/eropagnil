@@ -6,7 +6,7 @@ $this->breadcrumbs = array(
 ?><div>
     <h1 style="display: inline">Manage Blog Categories</h1>
     <div class="pull-right">
-        <a href="<?php echo $this->createUrl('blogcategory/create/') ?>" class="btn <?php echo $this->add_button; ?>">Add Blog Category</a>        
+        <a href="<?php echo $this->createUrl('blogCategory/create/') ?>" class="btn <?php echo $this->add_button; ?>">Add Blog Category</a>        
     </div>
 </div>
 <br/>

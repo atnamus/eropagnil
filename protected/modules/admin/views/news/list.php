@@ -22,13 +22,13 @@ $this->breadcrumbs = array(
             <div class="portlet-body">
                 <div class="table-scrollable">
                     <?php
-                    $gridColumns = array(['name' => 'id', 'header' => 'id', 'htmlOptions' => []],
-                        ['name' => 'title', 'header' => 'title', 'htmlOptions' => []],
+                    $gridColumns = array(['name' => 'id', 'header' => 'ID', 'htmlOptions' => []],
+                        ['name' => 'title', 'header' => 'Title', 'htmlOptions' => []],
                         ['name' => 'language_name', 'value' => '$data->language->name', 'header' => 'Language', 'htmlOptions' => []],
                         //['name' => 'slug', 'header' => 'slug', 'htmlOptions' => []],
                         // ['name' => 'content', 'header' => 'content', 'htmlOptions' => []],
                         ['name' => 'create_at', 'header' => 'Created Date', 'htmlOptions' => []],
-                        ['name' => 'status', 'type' => 'raw', 'value' => '$data->statusTag()', 'header' => 'status', 'htmlOptions' => [], 'sortable' => false,],
+                        ['name' => 'status', 'type' => 'raw', 'value' => '$data->statusTag()', 'header' => 'Status', 'htmlOptions' => [], 'sortable' => false,],
                         //['name' => 'language_id', 'header' => 'language_id', 'htmlOptions' => []],
                         /*
                           ['name' => 'create_at', 'header' => 'create_at', 'htmlOptions' => []],
@@ -37,7 +37,7 @@ $this->breadcrumbs = array(
                         array(
                             'htmlOptions' => array('nowrap' => 'nowrap'),
                             'class' => 'booster.widgets.TbButtonColumn',
-                        //'template' => '{view}{update}{delete}' //removed {view}
+                            'template' => '{update}{delete}' //removed {view}
                         //'viewButtonUrl' => null,//explicitly define url
                         //'updateButtonUrl' => null,
                         //'deleteButtonUrl' => null,

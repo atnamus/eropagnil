@@ -948,19 +948,54 @@ class AjaxController extends FrontController {
             echo json_encode($data_msg);
         }
     }
-    
-    public function actionAjaxpostcorrectioncomment(){
-        $request=Yii::app()->request;
-        if($request->isAjaxRequest){
-            $data_msg=array();
-            
-            $main_lines=$request->getPost("main_line");
-            
-            foreach($main_lines as $key=>$val){
+
+    public function actionAjaxpostcorrectioncomment() {
+        $request = Yii::app()->request;
+        if ($request->isAjaxRequest) {
+            $data_msg = array();
+
+            $comment = new CorrectionComments();
+
+            $correction_id = strip_tags($request->getPost("correction_id"));
+
+            $comment->user_id = $this->user_id;
+            $comment->comment_text = strip_tags($request->getPost("comment_box"));
+            $comment->correction_id = $correction_id;
+            $comment->create_at = date("Y-m-d H:i:s");
+            $comment->status = "1";
+            if ($comment->validate()) {
                 
+                $comment->save();
+
+                $comment_id = $comment->id;
+
+                echo "<pre>";
+                echo print_r($comment);
+                echo "</pre>";
+                exit;
+
+                $main_lines = $request->getPost("main_line");
+                $corrected_line = $request->getPost("corrected_line");
+                $line_perfect = $request->getPost("line_perfect");
+                $correction_comment = $request->getPost("correction_comment");
+
+                foreach ($main_lines as $key => $val) {
+                    $user_correction = new UserCorrection();
+                    $user_correction->id = NULL;
+                    $user_correction->setIsNewRecord(true);
+                    $user_correction->comment_id = $comment_id;
+                    $user_correction->main_line = $val;
+                    $user_correction->corrected_line = $corrected_line[$key];
+                    $user_correction->correction_id = $corrected_line;
+                    $user_correction->correction_type = $line_perfect[$key];
+                    $user_correction->user_id = $this->user_id;
+                    $user_correction->comment = $correction_comment[$key];
+                    $user_correction->create_at = date("Y-m-d H:i:s");
+                    $user_correction->status = "1";
+                    $user_correction->save();
+                }
             }
-            exit;
-            
+
             echo json_encode($data_msg);
         }
     }

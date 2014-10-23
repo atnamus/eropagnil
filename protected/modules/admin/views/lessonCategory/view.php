@@ -34,8 +34,8 @@ $this->breadcrumbs=array(
                                                 
                     </div>
                     <div class="form-actions right1">
-                        <a href="<?php echo $this->createUrl('lessoncategory/') ?>" class="btn <?php echo $this->back_button; ?>">Back</a>
-                        <a href="<?php echo $this->createUrl('lessoncategory/update/id/'.$model->id) ?>" class="btn <?php echo $this->update_button; ?>">Update</a>                       
+                        <a href="<?php echo $this->createUrl('lessonCategory/') ?>" class="btn <?php echo $this->back_button; ?>">Back</a>
+                        <a href="<?php echo $this->createUrl('lessonCategory/update/id/'.$model->id) ?>" class="btn <?php echo $this->update_button; ?>">Update</a>                       
                     </div>
                 </form>
             </div>

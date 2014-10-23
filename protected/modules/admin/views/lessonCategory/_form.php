@@ -54,7 +54,7 @@ $form = $this->beginWidget('CActiveForm', array(
     </div>
 </div>
 <div class="form-actions right1">
-    <a href="<?php echo $this->createUrl('lessoncategory/') ?>" class="btn <?php echo $this->cancel_button; ?>">Cancel</a>
+    <a href="<?php echo $this->createUrl('lessonCategory/') ?>" class="btn <?php echo $this->cancel_button; ?>">Cancel</a>
     <button type="submit" class="btn <?php echo $this->save_button; ?>"><?php echo $model->isNewRecord ? "Create" : "Save" ?></button>
 </div>
 <?php $this->endWidget(); ?>
