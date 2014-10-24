@@ -13,9 +13,9 @@
  * @property integer $status
  */
 class ForumCategory extends AdminModel {
-      const STATUS_ACTIVE = 1;
+
+    const STATUS_ACTIVE = 1;
     const STATUS_INACTIVE = 0;
-  
 
     /**
      * Returns the static model of the specified AR class.
@@ -87,5 +87,5 @@ class ForumCategory extends AdminModel {
             'criteria' => $criteria,
         ));
     }
- 
+
 }

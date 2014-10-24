@@ -1,10 +1,10 @@
-
 <?php
 $this->breadcrumbs = array(
     'Users' => array('index'),
     'Manage',
 );
-?><div>
+?>
+<div>
     <h1 style="display: inline">Manage Users</h1>
     <div class="pull-right">
         <a href="<?php echo $this->createUrl('user/create/') ?>" class="btn <?php echo $this->add_button; ?>">Add User</a>        
@@ -23,8 +23,8 @@ $this->breadcrumbs = array(
                 <div class="table-scrollable">
                     <?php
                     $gridColumns = array(
-                       // ['name' => 'first_name', 'header' => 'First Name', 'htmlOptions' => []],
-                       // ['name' => 'last_name', 'header' => 'Last Name', 'htmlOptions' => []],
+                        // ['name' => 'first_name', 'header' => 'First Name', 'htmlOptions' => []],
+                        // ['name' => 'last_name', 'header' => 'Last Name', 'htmlOptions' => []],
                         ['name' => 'full_name', 'header' => 'Name', 'htmlOptions' => []],
                         ['name' => 'username', 'header' => 'Username', 'htmlOptions' => []],
                         ['name' => 'email', 'header' => 'Email', 'htmlOptions' => []],

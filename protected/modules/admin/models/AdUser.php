@@ -60,10 +60,11 @@ class AdUser extends AdminModel {
 // NOTE: you should only define rules for those attributes that
 // will receive user inputs.
         return array(
-            array('full_name,username,email,user_type_id,first_name,gender,language_id, membership_id,status', 'required'),
+            array('full_name,username,email,gender,language_id,birthday,membership_id,status', 'required'),
+            array('user_type_id', 'required', 'message' => 'Please select user type.'),
             array('password', 'required', 'on' => 'create'),
             array('gender, sound_effect, microphone, speaker, membership_id', 'numerical', 'integerOnly' => true),
-            array('gender', 'required', 'on' => 'update', 'message' => '{attribute} is required.'),
+            array('gender', 'required', 'on' => 'update', 'message' => 'Please select gender.'),
             array('username', 'length', 'max' => 50),
             array('birthday', 'date', 'format' => 'yyyy-m-d'),
             array('email', 'length', 'max' => 128),
@@ -95,8 +96,6 @@ class AdUser extends AdminModel {
      * @return array relational rules.
      */
     public function relations() {
-// NOTE: you may need to adjust the relation name and the related
-// class name for the relations automatically generated below.
         return array(
         );
     }
@@ -111,6 +110,7 @@ class AdUser extends AdminModel {
             'email' => 'Email',
             'user_type_id' => 'User Type',
             'password' => 'Password',
+            'full_name' => 'Full Name',
             'first_name' => 'First Name',
             'last_name' => 'Last Name',
             'birthday' => 'Birthday',
@@ -172,7 +172,6 @@ class AdUser extends AdminModel {
     }
 
     public function afterFind() {
-        //reset the password to null because we don't want the hash to be shown.
         $this->initialPassword = $this->password;
         $this->password = null;
         parent::afterFind();

@@ -83,6 +83,8 @@ return CMap::mergeArray(
                         '/ajax-like-correction' => 'ajax/Ajaxlikecorrection',
                         '/ajax-load-corrections' => 'ajax/Ajaxloadcorrections',
                         '/ajax-post-correction-comment' => 'ajax/Ajaxpostcorrectioncomment',
+                        '/ajax-like-comment' => 'ajax/Ajaxlikecomment',
+                        '/ajax-correct-comment-mark' => 'ajax/Ajaxcommentmarkcorrect',
                         /* ------------------------------------------------------------- */
                         '<language:\w+>/<controller:\w+>/<id:\d+>' => '<controller>/view',
                         '<language:\w+>/<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',

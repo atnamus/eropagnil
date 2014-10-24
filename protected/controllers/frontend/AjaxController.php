@@ -781,6 +781,95 @@ class AjaxController extends FrontController {
         }
     }
 
+    function actionAjaxlikecomment() {
+        $request = Yii::app()->request;
+        if ($request->isAjaxRequest) {
+            $data_msg = array();
+
+            $comment_id = $request->getPost("comment_id");
+
+            $i_liked = 0;
+
+            $criteria = new CDbCriteria();
+
+            $criteria->select = "count(*) as `TotalLikes`";
+
+            $criteria->addCondition("t.user_id='" . $this->user_id . "'");
+
+            $criteria->addCondition("t.comment_id='" . $comment_id . "'");
+
+            $my_likes = CorrectionCommentLike::model()->find($criteria);
+
+            if ($my_likes->TotalLikes == 1) {
+                $i_liked = 1;
+            }
+
+            if ($i_liked == 0) {
+
+                $correction_id = strip_tags($request->getPost("correction_id"));
+                $cor_like = new CorrectionCommentLike();
+                $cor_like->setIsNewRecord(TRUE);
+                $cor_like->id = NULL;
+                $cor_like->user_id = $this->user_id;
+                $cor_like->comment_id = $comment_id;
+                $cor_like->correction_id = $correction_id;
+                $cor_like->create_at = date("Y-m-d H:i:s");
+                if ($cor_like->save() == false) {
+                    echo "<pre>";
+                    print_r($cor_like->getErrors());
+                    echo "</pre>";
+                    exit;
+                }
+                $i_liked = 1;
+            }
+
+            $criteria = new CDbCriteria();
+
+            $criteria->select = "count(*) as `TotalLikes`";
+
+            $criteria->addCondition("t.user_id!='" . $this->user_id . "'");
+
+            $criteria->addCondition("t.comment_id='" . $comment_id . "'");
+
+            $likes = CorrectionCommentLike::model()->find($criteria);
+
+            $other_likes = $likes->TotalLikes;
+
+            $html = "";
+
+            if ($i_liked == "1" && $other_likes == "0") {
+                $html = "You liked this";
+            } else if ($i_liked == "0" && $other_likes > "0") {
+                $html = $other_likes . " people likes this";
+            } else if ($i_liked == "1" && $other_likes > "0") {
+                $html = "You and " . $other_likes . " people likes this";
+            }
+
+            $data_msg['status'] = "success";
+
+            $data_msg['html'] = $html;
+
+            echo json_encode($data_msg);
+        }
+    }
+
+    function actionAjaxcommentmarkcorrect() {
+        $request = Yii::app()->request;
+        if ($request->isAjaxRequest) {
+            $data_msg = array();
+            $comment_id = strip_tags($request->getPost("comment_id"));
+            $correction_id = strip_tags($request->getPost("correction_id"));
+
+            $comment_model = CorrectionComments::model()->findByPk($comment_id);
+            $comment_model->is_correct = "1";
+            $comment_model->save();
+
+            $data_msg['status'] = "success";
+
+            echo json_encode($data_msg);
+        }
+    }
+
     function actionAjaxlikecorrection() {
         $request = Yii::app()->request;
         if ($request->isAjaxRequest) {
@@ -964,11 +1053,11 @@ class AjaxController extends FrontController {
             $comment->create_at = date("Y-m-d H:i:s");
             $comment->status = "1";
             if ($comment->validate()) {
-                
+
                 $comment->save();
-                
+
                 $comment_id = $comment->id;
-                
+
                 $main_lines = $request->getPost("main_line");
                 $corrected_line = $request->getPost("corrected_line");
                 $line_perfect = $request->getPost("line_perfect");
@@ -989,6 +1078,17 @@ class AjaxController extends FrontController {
                     $user_correction->status = "1";
                     $user_correction->save();
                 }
+
+                $criteria = new CDbCriteria();
+                $criteria->select = "count(t.id) as Total";
+                $criteria->addCondition("t.correction_id='$correction_id'");
+
+                $data = CorrectionComments::model()->find($criteria);
+                $correction_model=  Correction::model()->findByPk($correction_id);
+                $correction_model->total_corrections=$data->Total;
+                $correction_model->save();
+
+                $data_msg['status'] = "success";
             }
 
             echo json_encode($data_msg);

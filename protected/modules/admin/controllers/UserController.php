@@ -48,8 +48,8 @@ class UserController extends AdminController {
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
 
-        if (isset($_POST['User'])) {
-            $model->attributes = $_POST['User'];
+        if (isset($_POST['AdUser'])) {
+            $model->attributes = $_POST['AdUser'];
             $model->scenario = 'create';
             if ($model->save()) {
                 Yii::app()->user->setFlash('success_msg', "User created successfully");
@@ -70,8 +70,8 @@ class UserController extends AdminController {
      */
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
-        if (isset($_POST['User'])) {
-            $model->attributes = $_POST['User'];
+        if (isset($_POST['AdUser'])) {
+            $model->attributes = $_POST['AdUser'];
             $model->scenario = 'update';
             if (!empty($model->password)) {
                 $model->password = $model->password; //Yii::app()->user->hashPassword()

@@ -8,15 +8,18 @@
     * @property string $user_id
     * @property string $correction_id
     * @property string $comment_text
+    * @property integer $is_correct
     * @property string $create_at
     * @property integer $status
     *
     * The followings are the available model relations:
             * @property Correction $correction
+            * @property UserCorrection[] $userCorrections 
             * @property User $user
     */
 class CorrectionComments extends CActiveRecord
 {
+    public $Total;
 /**
 * Returns the static model of the specified AR class.
 * @param string $className active record class name.
@@ -44,7 +47,7 @@ public function rules()
 // will receive user inputs.
 return array(
     array('user_id, correction_id, comment_text, create_at, status', 'required'),
-    array('status', 'numerical', 'integerOnly'=>true),
+    array('is_correct, status', 'numerical', 'integerOnly'=>true),
     array('user_id, correction_id', 'length', 'max'=>20),
 // The following rule is used by search().
 // Please remove those attributes that should not be searched.
@@ -60,8 +63,10 @@ public function relations()
 // NOTE: you may need to adjust the relation name and the related
 // class name for the relations automatically generated below.
 return array(
-    'correction' => array(self::BELONGS_TO, 'Correction', 'correction_id'),
+    'correctionCommentLikes' => array(self::HAS_MANY, 'CorrectionCommentLike', 'comment_id'),
     'user' => array(self::BELONGS_TO, 'User', 'user_id'),
+    'correction' => array(self::BELONGS_TO, 'Correction', 'correction_id'),
+    'userCorrections' => array(self::HAS_MANY, 'UserCorrection', 'comment_id'),
 );
 }
 
@@ -75,6 +80,7 @@ return array(
     'user_id' => 'User',
     'correction_id' => 'Correction',
     'comment_text' => 'Comment Text',
+    'is_correct' => 'Is Correct',
     'create_at' => 'Create At',
     'status' => 'Status',
 );
@@ -95,6 +101,7 @@ $criteria=new CDbCriteria;
 		$criteria->compare('user_id',$this->user_id,true);
 		$criteria->compare('correction_id',$this->correction_id,true);
 		$criteria->compare('comment_text',$this->comment_text,true);
+                $criteria->compare('is_correct',$this->is_correct);
 		$criteria->compare('create_at',$this->create_at,true);
 		$criteria->compare('status',$this->status);
 

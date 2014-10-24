@@ -54,11 +54,9 @@ class User extends CActiveRecord {
      * @return array validation rules for model attributes.
      */
     public function rules() {
-        // NOTE: you should only define rules for those attributes that
-        // will receive user inputs.
         return array(
             array('gender,language_id', 'required', 'on' => 'settings_update'),
-            array('username, email,password', 'required', 'on' => 'signup'),
+            array('full_name,username, email,password', 'required', 'on' => 'signup'),
 //            array('email', 'email','message'=>"Invalid email address", 'on' => 'signup'),
             array('full_name,username, email,password,confirm_password,user_type_id, birthday, gender, language_id, profile_image, membership_id, activation_code, reset_key, create_at, update_at', 'required', 'on' => 'other'),
             array('username', 'checkUserName', 'on' => 'signup'),
@@ -74,8 +72,6 @@ class User extends CActiveRecord {
             array('activation_code', 'length', 'max' => 255),
             array('reset_key', 'length', 'max' => 40),
             array('status', 'length', 'max' => 8),
-            // The following rule is used by search().
-            // Please remove those attributes that should not be searched.
             array('id, username, email, user_type_id, password, full_name, birthday, gender, language_id, profile_image, sound_effect, microphone, speaker, activation_code, reset_key, status, create_at, update_at', 'safe', 'on' => 'search'),
         );
     }
@@ -88,9 +84,8 @@ class User extends CActiveRecord {
         // class name for the relations automatically generated below.
         return array(
             'userType' => array(self::BELONGS_TO, 'UserType', 'UserTypeId'),
-             'blogcomments' => array(self::HAS_MANY, 'BlogComment', 'author_id'),
-            'blogCommentCount'=>array(self::STAT, 'BlogComment', 'author_id','condition'=>'status='.BlogComment::STATUS_PUBLISHED)); 
-        
+            'blogcomments' => array(self::HAS_MANY, 'BlogComment', 'author_id'),
+            'blogCommentCount' => array(self::STAT, 'BlogComment', 'author_id', 'condition' => 'status=' . BlogComment::STATUS_PUBLISHED));
     }
 
     public function checkEmail($attribute, $params) {

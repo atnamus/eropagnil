@@ -95,7 +95,7 @@ if ($model->birthday == '0000-00-00')
     <div class="form-group">
         <label class="col-md-3 control-label">Default Language</label>
         <div class="col-md-9">
-            <?php echo CHtml::dropDownList("User[language_id]", $model->language_id, Languages::model()->getActiveList(), ["empty" => "Select Language", "class" => "form-control"]); ?>
+            <?php echo CHtml::dropDownList("AdUser[language_id]", $model->language_id, Languages::model()->getActiveList(), ["empty" => "Select Language", "class" => "form-control"]); ?>
             <?php echo $form->error($model, 'language_id'); ?>
         </div>
     </div>    

@@ -11,7 +11,7 @@ class CorrectionController extends FrontController {
     public function actionPost() {
 
         $data_msg = array();
-        
+
         $total_corrections = Correction::model()->get_correction_counts($this->user_id);
 
         $data_msg['entries_written'] = $total_corrections['entries_written'];
@@ -25,8 +25,8 @@ class CorrectionController extends FrontController {
 
     public function actionViewcorrection($display_id) {
         $data_msg = array();
-        
-        $criteria=new CDbCriteria();
+
+        $criteria = new CDbCriteria();
         $criteria->addCondition("t.display_id='$display_id'");
         $criteria->addCondition("t.status!=3");
 
@@ -152,28 +152,69 @@ class CorrectionController extends FrontController {
 
         $data_msg['i_liked'] = $i_liked;
 
+        $criteria = new CDbCriteria();
+
+        $criteria->addCondition("t.correction_id='" . $correction_details->id . "'");
+
+        $criteria->addCondition("t.status!='3'");
+
+        $corretion_comments = CorrectionComments::model()->with("userCorrections","user","correctionCommentLikes")->findAll($criteria);
+
+//        $comments = array();
+//
+//        foreach ($corretion_comments as $key => $val) {
+//
+//            $user_corections = array();
+//
+//            foreach ($val->userCorrections as $cor_index => $cor_data) {
+//                $user_corections[] = array(
+//                    "id" => $cor_data->id,
+//                    "comment_id" => $cor_data->comment_id,
+//                    "main_line" => $cor_data->main_line,
+//                    "corrected_line" => $cor_data->corrected_line,
+//                    "correction_id" => $cor_data->correction_id,
+//                    "correction_type" => $cor_data->correction_type,
+//                    "user_id" => $cor_data->user_id,
+//                    "comment" => $cor_data->comment,
+//                    "create_at" => $cor_data->create_at,
+//                    "status" => $cor_data->status
+//                );
+//            }
+//
+//            $comments[] = array(
+//                "id" => $val->id,
+//                "user_id" => $val->user_id,
+//                "correction_id" => $val->correction_id,
+//                "comment_text" => $val->comment_text,
+//                "create_at" => $val->create_at,
+//                "all_corrections" => $user_corections
+//            );
+//        }
+        
+        $data_msg['corretion_comments']=$corretion_comments;
+
         $this->render("/correction_details", $data_msg);
     }
 
     public function actionListcorrection() {
         $data_msg = array();
 
-        $criteria=new CDbCriteria();
+        $criteria = new CDbCriteria();
 
         $criteria->addCondition("t.status!='3'");
-        $criteria->order="t.create_at DESC";
-        
-        $latest_entries=Correction::model()->with("user","language")->findAll($criteria);
+        $criteria->order = "t.create_at DESC";
 
-        $data_msg['latest_entries']=$latest_entries;
+        $latest_entries = Correction::model()->with("user", "language")->findAll($criteria);
+
+        $data_msg['latest_entries'] = $latest_entries;
 
         $this->render("/correction_list", $data_msg);
     }
 
     public function actionEditcorrection($display_id) {
         $data_msg = array();
-        
-        $criteria=new CDbCriteria();
+
+        $criteria = new CDbCriteria();
         $criteria->addCondition("display_id='$display_id'");
         $criteria->addCondition("status!=3");
 
@@ -183,14 +224,14 @@ class CorrectionController extends FrontController {
             $this->redirect(Yii::app()->request->baseUrl);
             exit;
         }
-        
-        if($correction_model->user_id!=$this->user_id){
+
+        if ($correction_model->user_id != $this->user_id) {
             $this->redirect(Yii::app()->request->baseUrl);
             exit;
         }
-        
-        $data_msg['display_id']=$display_id;
-        
+
+        $data_msg['display_id'] = $display_id;
+
         $total_corrections = Correction::model()->get_correction_counts($this->user_id);
 
         $data_msg['entries_written'] = $total_corrections['entries_written'];
@@ -219,23 +260,23 @@ class CorrectionController extends FrontController {
 
         $this->render("/edit_correction", $data_msg);
     }
-    
-    function actionDeletecorrection($display_id){
+
+    function actionDeletecorrection($display_id) {
         $correction_model = Correction::model()->findByAttributes(array("display_id" => $display_id));
 
         if (empty($correction_model)) {
             $this->redirect(Yii::app()->request->baseUrl);
             exit;
         }
-        
-        if($correction_model->user_id!=$this->user_id){
+
+        if ($correction_model->user_id != $this->user_id) {
             $this->redirect(Yii::app()->request->baseUrl);
             exit;
         }
-        
-        $correction_model->status="3";
+
+        $correction_model->status = "3";
         $correction_model->save();
-        Yii::app()->user->setFlash("success_msg","Correction Deleted Successfully!");
+        Yii::app()->user->setFlash("success_msg", "Correction Deleted Successfully!");
         $this->redirect(array("/home/Memberhome"));
         exit;
     }
