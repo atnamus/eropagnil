@@ -1,14 +1,36 @@
+<?php
+$profile_pic = $user_details->profile_image;
+$profile_pic = ($profile_pic == "") ? $this->default_profile_pic : $profile_pic;
+?>
 <div class="learner_public_profile">
     <div class="container">
         <div class="learn_pp">
             <div class="row">
                 <div class="col-md-8">
                     <div class="learner_profile row">
-                        <div class="col-md-3 learn_pro_img"><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/images/ch-less01.jpg" alt=""></div>
+                        <div class="col-md-3 learn_pro_img">
+                            <img src="<?php echo $this->profile_image_path; ?>/<?php echo $profile_pic; ?>" alt="">
+                        </div>
                         <div class="col-md-9 learn_pro_desc">
-                            <h3>Anan Johnson</h3>
-                            <p>I read sad news in the morning paper today. Two 6th-grade girls committed suicide together in Tokyo. </p>
-                            <a href="" class="pull-right lear-follow">Follow</a>
+                            <h3><?php echo $user_details->full_name; ?></h3>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                            <?php
+                            if ($user_details->id != $this->user_id) {
+                                if(isset($follow_status)){
+                                ?>
+                                <a href="#" id="follow_unfollow" data-userid="<?php echo $user_details->id; ?>" class="pull-right lear-follow">
+                                    <?php
+                                    if($follow_status=="F"){
+                                    echo "Unfollow";
+                                    }else{
+                                    echo "Follow";
+                                    }
+                                    ?>
+                                </a>
+                                <?php
+                                }
+                            }
+                            ?>
                         </div>
                     </div>
                     <ul class="timeline">
@@ -220,91 +242,116 @@
                         <ul id="learn-tab">
                             <li class="active">
                                 <div class="tab-cont-list">
-                                    Lorem ipsum dolor sit amet,
+                                    <?php
+                                    foreach ($correction_post as $key => $val) {
+                                        $title = Yii::app()->cglobal->get_lesson_title($val->title, $val->intro_text);
+                                        ?>
+                                        <a class="profile_list_a" href="<?php echo $this->createUrl("correction-details/" . $val->display_id); ?>"><?php echo $title; ?></a>
+                                        <?php
+                                    }
+                                    ?>
                                 </div>
                             </li>
                             <li>
                                 <div class="tab-cont-list">
-                                    Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, 
+                                    <?php
+                                    foreach ($correction_made as $key => $val) {
+                                        $title = Yii::app()->cglobal->get_lesson_title($val['correction']->title, $val['correction']->intro_text);
+                                        ?>
+                                        <a class="profile_list_a" href="<?php echo $this->createUrl("correction-details/" . $val['correction']->display_id); ?>"><?php echo $title; ?></a>
+                                        <?php
+                                    }
+                                    ?>
                                 </div>
                             </li>
                         </ul>
                     </div>
                     <div class="learn-writ">
+                        <?php
+                        $total_corrections = Correction::model()->get_correction_counts($user_details->id);
+
+                        $entries_written = $total_corrections['entries_written'];
+                        $corrections_recieved = $total_corrections['corrections_recieved'];
+                        $correction_made = $total_corrections['correction_made'];
+                        ?>
+                        <input type="hidden" name="current_user" id="current_user" value="<?php echo $user_details->id; ?>" />
                         <ul>
-                            <li><span>1,752</span>Entries Written</li>
-                            <li><span>25,168</span>Corrections made</li>
-                            <li><span>3,522</span>Corrections received</li>
+                            <li class="ent-profile" id="load_entries_written"><span><?php echo $entries_written; ?></span>Entries Written</li>
+                            <li class="ent-profile" id="load_corrections_made"><span><?php echo $correction_made; ?></span>Corrections made</li>
+                            <li class="ent-profile" id="load_corrections_recieved"><span><?php echo $corrections_recieved; ?></span>Corrections received</li>
                         </ul>
                     </div>
                     <section>
                         <h2>Latest Journals</h2>
                         <div class="sec-cont">
-                            <ul>
-                                <li>
-                                    <h3>If you make a correction, you will get </h3>
-                                    <p>â€œThanks for bringing back the word list . I've got a few ideas.</p>
-                                    <a href="#" class="">https://www.learning.com</a>
-                                </li>
-                                <li>
-                                    <h3>If you make a correction, you will get </h3>
-                                    <p>â€œThanks for bringing back the word list . I've got a few ideas.</p>
-                                    <a href="#" class="">https://www.learning.com</a>
-                                </li>
-                                <li>
-                                    <h3>If you make a correction, you will get </h3>
-                                    <p>â€œThanks for bringing back the word list . I've got a few ideas.</p>
-                                    <a href="#" class="">https://www.learning.com</a>
-                                </li>
-                            </ul>
+                            <!--                            <ul>
+                                                            <li>
+                                                                <h3>If you make a correction, you will get </h3>
+                                                                <p>â€œThanks for bringing back the word list . I've got a few ideas.</p>
+                                                                <a href="#" class="">https://www.learning.com</a>
+                                                            </li>
+                                                            <li>
+                                                                <h3>If you make a correction, you will get </h3>
+                                                                <p>â€œThanks for bringing back the word list . I've got a few ideas.</p>
+                                                                <a href="#" class="">https://www.learning.com</a>
+                                                            </li>
+                                                            <li>
+                                                                <h3>If you make a correction, you will get </h3>
+                                                                <p>â€œThanks for bringing back the word list . I've got a few ideas.</p>
+                                                                <a href="#" class="">https://www.learning.com</a>
+                                                            </li>
+                                                        </ul>-->
                         </div>
                     </section>
                     <section>
                         <h2>Input lessons</h2>
                         <div class="sec-cont inp-less">
                             <ul>
-                                <li>
-                                    <span>1</span>
-                                    <a href="#" class="">Everything you need to build.....</a>
-                                </li>
-                                <li>
-                                    <span>2</span>
-                                    <a href="#" class="">Did we mention it doesnâ€™t .....</a>
-                                </li>
-                                <li>
-                                    <span>3</span>
-                                    <a href="#" class=""> Itâ€™s easy, even for non-techies.</a>
-                                </li>
+                                <?php
+                                foreach ($lessons as $key => $val) {
+                                    ?>
+                                    <li>
+                                        <span><?php echo ($key + 1); ?></span>
+                                        <a href="javascript:void(0)" class=""><?php echo $val->title; ?></a>
+                                    </li>
+                                    <?php
+                                }
+                                ?>
                             </ul>
                         </div>
                     </section>
                     <div class=""><a href="#" class="mileage">Mileage</a></div>
                     <section>
                         <h2>Friends</h2>
-
                         <ul id="frnd-tabs">
-                            <li class="active">Following: 14  </li>
-                            <li> Followers: 11</li>
+                            <li class="active">Following: <?php echo $total_following; ?>  </li>
+                            <li> Followers: <?php echo $total_followers; ?></li>
                         </ul>
                         <ul id="frnd-tab">
                             <li class="active">
-                                <div class="tab-cont-list">                                    
-                                    <span><a href="#"><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/images/ch-less03.jpg" alt=""></a></span>
-                                    <span><a href="#"><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/images/ch-less01.jpg" alt=""></a></span>
-                                    <span><a href="#"><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/images/ch-less03.jpg" alt=""></a></span>
-                                    <span><a href="#"><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/images/ch-less01.jpg" alt=""></a></span>
-                                    <span><a href="#"><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/images/ch-less03.jpg" alt=""></a></span>
-                                    <span><a href="#"><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/images/ch-less01.jpg" alt=""></a></span>
+                                <div class="tab-cont-list">
+                                    <?php
+                                    foreach ($all_following as $key => $val) {
+                                        $profile_pic = $val['following']->profile_image;
+                                        $profile_pic = ($profile_pic == "") ? $this->default_profile_pic : $profile_pic;
+                                        ?>
+                                        <span><a href="<?php echo $this->createUrl("profile/" . $val['following']->username); ?>"><img src="<?php echo $this->profile_image_path; ?>/<?php echo $profile_pic; ?>" alt=""></a></span>
+                                        <?php
+                                    }
+                                    ?>
                                 </div>
                             </li>
                             <li>
                                 <div class="tab-cont-list">
-                                    <span><a href="#"><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/images/ch-less01.jpg" alt=""></a></span>
-                                    <span><a href="#"><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/images/ch-less03.jpg" alt=""></a></span>
-                                    <span><a href="#"><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/images/ch-less01.jpg" alt=""></a></span>
-                                    <span><a href="#"><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/images/ch-less03.jpg" alt=""></a></span>
-                                    <span><a href="#"><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/images/ch-less01.jpg" alt=""></a></span>
-                                    <span><a href="#"><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/images/ch-less03.jpg" alt=""></a></span> 
+                                   <?php
+                                    foreach ($all_followers as $key => $val) {
+                                        $profile_pic = $val['follower']->profile_image;
+                                        $profile_pic = ($profile_pic == "") ? $this->default_profile_pic : $profile_pic;
+                                        ?>
+                                        <span><a href="<?php echo $this->createUrl("profile/" . $val['follower']->username); ?>"><img src="<?php echo $this->profile_image_path; ?>/<?php echo $profile_pic; ?>" alt=""></a></span>
+                                        <?php
+                                    }
+                                    ?>
                                 </div>
                             </li>
                         </ul>
@@ -318,26 +365,29 @@
     </div>
 </div>
 <script type="text/javascript">
-    $(document).ready(function(){
-    $("ul#learn-tabs li").click(function(e){
-        if (!$(this).hasClass("active")) {
-            var tabNum = $(this).index();
-            var nthChild = tabNum+1;
-            $("ul#learn-tabs li.active").removeClass("active");
-            $(this).addClass("active");
-            $("ul#learn-tab li.active").removeClass("active");
-            $("ul#learn-tab li:nth-child("+nthChild+")").addClass("active");
-        }
+    $(document).ready(function() {
+        $("ul#learn-tabs li").click(function(e) {
+            if (!$(this).hasClass("active")) {
+                var tabNum = $(this).index();
+                var nthChild = tabNum + 1;
+                $("ul#learn-tabs li.active").removeClass("active");
+                $(this).addClass("active");
+                $("ul#learn-tab li.active").removeClass("active");
+                $("ul#learn-tab li:nth-child(" + nthChild + ")").addClass("active");
+            }
+        });
+        $("ul#frnd-tabs li").click(function(e) {
+            if (!$(this).hasClass("active")) {
+                var tabNum = $(this).index();
+                var nthChild = tabNum + 1;
+                $("ul#frnd-tabs li.active").removeClass("active");
+                $(this).addClass("active");
+                $("ul#frnd-tab li.active").removeClass("active");
+                $("ul#frnd-tab li:nth-child(" + nthChild + ")").addClass("active");
+            }
+        });
     });
-    $("ul#frnd-tabs li").click(function(e){
-        if (!$(this).hasClass("active")) {
-            var tabNum = $(this).index();
-            var nthChild = tabNum+1;
-            $("ul#frnd-tabs li.active").removeClass("active");
-            $(this).addClass("active");
-            $("ul#frnd-tab li.active").removeClass("active");
-            $("ul#frnd-tab li:nth-child("+nthChild+")").addClass("active");
-        }
-    });
-});
 </script>
+<?php
+$this->loadJs(array("custom/learner_profile.js"));
+?>

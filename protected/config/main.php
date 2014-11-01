@@ -1,9 +1,6 @@
 <?php
 
-// uncomment the following to define a path alias
-// Yii::setPathOfAlias('local','path/to/local-folder');
-// This is the main Web application configuration. Any writable
-// CWebApplication properties can be configured here.
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'helper' . DIRECTORY_SEPARATOR . 'Assets.php';
 return array(
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
     'name' => 'Lingapore',
@@ -86,18 +83,18 @@ return array(
                     'levels' => 'error, warning',
                 ),
             // uncomment the following to show log messages on web pages
-               // array(
-               //     'class' => 'CWebLogRoute',
-               // ),
+            // array(
+            //     'class' => 'CWebLogRoute',
+            // ),
             ),
         ),
     ),
     // application-level parameters that can be accessed
     // using Yii::app()->params['paramName']
     'params' => array(
-        'lesson_audio_path'=>'/uploads/lesson/audio/',
-        'lesson_image_path'=>'uploads/lesson/image',
-        'lesson_video_path'=>'uploads/lesson/video',
+        'lesson_audio_path' => '/uploads/lesson/audio/',
+        'lesson_image_path' => 'uploads/lesson/image',
+        'lesson_video_path' => 'uploads/lesson/video',
     ),
     'behaviors' => array(
         'runEnd' => array(

@@ -90,6 +90,14 @@ class UserController extends FrontController {
             $this->redirect($this->createUrl("home/Memberhome"));
         }
 
+        $user_type = "";
+
+        if (Yii::app()->request->getParam("user_type")) {
+            $user_type = Yii::app()->request->getParam("user_type");
+        }
+
+        $data_msg['user_type'] = $user_type;
+
         $first_name = "";
         $last_name = "";
         $full_name = "";
@@ -139,6 +147,8 @@ class UserController extends FrontController {
 
         if (isset($_POST['User'])) {
 
+            $user_type_id = "";
+
             $user_model->attributes = $_POST['User'];
             $user_model->status = '0';
             $user_model->create_at = date("Y-m-d H:i:s");
@@ -146,6 +156,31 @@ class UserController extends FrontController {
 //            $user_model->confirm_password = md5($_POST['User']['confirm_password']);
             $activation_key = $this->getKey($user_model->email);
             $user_model->activation_code = $activation_key;
+            $user_type = Yii::app()->request->getPost("user_type");
+
+            switch ($user_type) {
+                case "learner":
+                    $user_type_id = "2";
+                    break;
+
+                case "parent":
+                    $user_type_id = "4";
+                    break;
+
+                case "school":
+                    $user_type_id = "5";
+                    break;
+
+                case "company":
+                    $user_type_id = "6";
+                    break;
+
+                case "business_guide":
+                    $user_type_id = "7";
+                    break;
+            }
+
+            $user_model->user_type_id = $user_type_id;
 
             if ($user_model->validate()) {
                 $user_model->save();

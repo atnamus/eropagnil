@@ -15,6 +15,8 @@ class CorrectionController extends FrontController {
         $total_corrections = Correction::model()->get_correction_counts($this->user_id);
 
         $data_msg['entries_written'] = $total_corrections['entries_written'];
+        $data_msg['corrections_recieved'] = $total_corrections['corrections_recieved'];
+        $data_msg['correction_made'] = $total_corrections['correction_made'];
 
         $languages = Languages::model()->findAllByAttributes(array("status" => "1"));
 
@@ -37,15 +39,14 @@ class CorrectionController extends FrontController {
             exit;
         }
 
-        $total_corrections = Correction::model()->get_correction_counts($this->user_id);
-
-        $data_msg['entries_written'] = $total_corrections['entries_written'];
+        $data_msg['user_id'] = $correction_details->user_id;
 
         $is_owner = false;
 
         if ($correction_details->user_id == $this->user_id) {
             $is_owner = true;
         }
+
         if ($correction_details->user_id != $this->user_id) {
             $visited = CorrectionVisit::model()->findByAttributes(array("user_id" => $this->user_id, "correction_id" => $correction_details->id));
 
@@ -157,8 +158,9 @@ class CorrectionController extends FrontController {
         $criteria->addCondition("t.correction_id='" . $correction_details->id . "'");
 
         $criteria->addCondition("t.status!='3'");
+        $criteria->addCondition("t.parent_id='0'");
 
-        $corretion_comments = CorrectionComments::model()->with("userCorrections","user","correctionCommentLikes")->findAll($criteria);
+        $corretion_comments = CorrectionComments::model()->with("userCorrections", "user", "correctionCommentLikes")->findAll($criteria);
 
 //        $comments = array();
 //
@@ -190,8 +192,8 @@ class CorrectionController extends FrontController {
 //                "all_corrections" => $user_corections
 //            );
 //        }
-        
-        $data_msg['corretion_comments']=$corretion_comments;
+
+        $data_msg['corretion_comments'] = $corretion_comments;
 
         $this->render("/correction_details", $data_msg);
     }

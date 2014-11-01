@@ -13,13 +13,97 @@ class ProfileController extends FrontController {
 
     public function actionViewprofile($username) {
         $data_msg = array();
+        if ($this->user_type_id >= "3") {
+            $this->redirect($this->createUrl("home/Memberhome"));
+            exit;
+        }
+
+        $criteria = new CDbCriteria();
+
+        $criteria->addCondition("t.username='" . $username . "'");
+
+        $user_details = User::model()->find($criteria);
+
+        if (empty($user_details)) {
+            $this->redirect($this->createUrl("home/Memberhome"));
+            exit;
+        }
+
+        $data_msg['user_details'] = $user_details;
+
+        $criteria = new CDbCriteria();
+
+        $criteria->addCondition("t.user_id='" . $user_details->id . "'");
+
+        $criteria->order = "t.create_at DESC";
+
+        $criteria->limit = 6;
+
+        $correction_post = Correction::model()->findAll($criteria);
+
+        $data_msg['correction_post'] = $correction_post;
+
+        $criteria = new CDbCriteria();
+
+        $criteria->addCondition("t.user_id='" . $user_details->id . "'");
+        $criteria->addCondition("t.comment_type='0'");
+
+        $criteria->order = "t.create_at DESC";
+        $criteria->limit = 6;
+//        $criteria->group = "t.correction_id";
+
+
+        $correction_made = CorrectionComments::model()->with("correction")->findAll($criteria);
+
+        $data_msg['correction_post'] = $correction_post;
+        $data_msg['correction_made'] = $correction_made;
+
+        $criteria = new CDbCriteria();
+
+        $criteria->addCondition("t.user_id='" . $user_details->id . "'");
+        $criteria->addCondition("t.status='1'");
+
+        $criteria->order = "t.create_at DESC";
+
+        $criteria->limit = 6;
+
+        $lessons = Lesson::model()->findAll($criteria);
+
+        $data_msg['lessons'] = $lessons;
+
+        $followers = UserFollow::model()->get_followers($user_details->id, 10);
+
+        $data_msg['total_followers'] = $followers['total'];
+
+        $data_msg['all_followers'] = $followers['all_data'];
+        
+        $following = UserFollow::model()->get_following($user_details->id, 10);
+        
+        $data_msg['total_following'] = $following['total'];
+
+        $data_msg['all_following'] = $following['all_data'];
+        
+        $follow_status="U";
+        
+        $follow=UserFollow::model()->findByAttributes(array("follower_id"=>$this->user_id,"following_id"=>$user_details->id,"status"=>"1"));
+        
+        if(!empty($follow)){
+            $follow_status="F";
+        }
+        
+        $data_msg['follow_status']=$follow_status;
 
         $this->render("/learner_profile", $data_msg);
     }
 
     public function actionSettings() {
         $data_msg = array();
-        
+
+        if ($this->user_type_id >= "3") {
+            $this->redirect($this->createUrl("home/Memberhome"));
+            exit;
+        }
+
         $this->set_page_seo("my_account");
 
         $user_data = User::model()->findByPk($this->user_id);
@@ -69,13 +153,21 @@ class ProfileController extends FrontController {
 
         $l_criteria = new CDbCriteria();
 
-        $l_criteria->addCondition("t.user_id='".$this->user_id."'");
-        
+        $l_criteria->addCondition("t.user_id='" . $this->user_id . "'");
+
         $l_criteria->addCondition("t.status!='3'");
 
         $lessons = Lesson::model()->findAll($l_criteria);
-        
-        $data_msg['lessons']=$lessons;
+
+        $data_msg['lessons'] = $lessons;
+
+        $stages = LessonStage::model()->findAllByAttributes(array("status" => "1"));
+
+        $data_msg['stages'] = $stages;
+
+        $languages = Languages::model()->findAllByAttributes(array("status" => "1"));
+
+        $data_msg['all_languages'] = $languages;
 
         $this->render("/account_settings", $data_msg);
     }

@@ -1,3 +1,4 @@
+var validate_form = true;
 var proceed_to_next = false;
 
 var lesson_assets;
@@ -56,33 +57,33 @@ function load_quiz_data(quizid) {
                 var answer_holder = $(".answer_holder:eq(" + (index) + ")");
                 $(answer_holder).find(".image_name").val(elem.image);
                 $(answer_holder)
-                    .find(".image_name")
-                    .closest(".file_container")
-                    .find(".file_name_holder").html(elem.image);
+                        .find(".image_name")
+                        .closest(".file_container")
+                        .find(".file_name_holder").html(elem.image);
 
                 $(answer_holder)
-                    .find(".audio_name")
-                    .closest(".file_container")
-                    .find(".file_name_holder").html(elem.audio);
+                        .find(".audio_name")
+                        .closest(".file_container")
+                        .find(".file_name_holder").html(elem.audio);
 
                 if (elem.audio != "") {
                     $(answer_holder)
-                        .find(".audio_holder")
-                        .find(".file_cross").addClass('audio_delete');
+                            .find(".audio_holder")
+                            .find(".file_cross").addClass('audio_delete');
                 } else {
                     $(answer_holder)
-                        .find(".audio_holder")
-                        .find(".file_cross").removeClass('audio_delete');
+                            .find(".audio_holder")
+                            .find(".file_cross").removeClass('audio_delete');
                 }
 
                 if (elem.image != "") {
                     $(answer_holder)
-                        .find(".image_holder")
-                        .find(".file_cross").addClass('image_delete');
+                            .find(".image_holder")
+                            .find(".file_cross").addClass('image_delete');
                 } else {
                     $(answer_holder)
-                        .find(".image_holder")
-                        .find(".file_cross").removeClass('image_delete');
+                            .find(".image_holder")
+                            .find(".file_cross").removeClass('image_delete');
                 }
 
                 $(answer_holder).find(".audio_name").val(elem.audio);
@@ -128,6 +129,26 @@ function load_quiz_data(quizid) {
 
 $(document).ready(function(e) {
 
+    $(".start_as").click(function(e) {
+        e.preventDefault();
+        show_js_loader(true);
+        var THIS = $(this);
+        $.ajax({
+            url: full_path + '/ajax-choose-startas',
+            type: "POST",
+            dataType: "json",
+            data: {
+                user_type: $(THIS).attr("data-usertype")
+            },
+            success: function(data) {
+                if (data.status != undefined) {
+                    show_js_loader(false);
+                    window.location.reload();
+                }
+            }
+        });
+    });
+
     $(".audio_delete_answer").click(function(event) {
         $(this).parent("a").find(".file_container").find("input").val("");
         $(this).parent("a").find(".file_container").find(".file_name_holder").html("");
@@ -163,9 +184,9 @@ $(document).ready(function(e) {
     });
 
     $("#skit_form").find(".bootstrap-filestyle")
-        .css("margin", "auto")
-        .css("width", "86%")
-        .css("margin-top", "3px");
+            .css("margin", "auto")
+            .css("width", "86%")
+            .css("margin-top", "3px");
 
     $("#delete_lesson").click(function(e) {
         e.preventDefault();
@@ -334,8 +355,14 @@ $(document).ready(function(e) {
 
     $(".step1").show();
 
-    $("#get_started").click(function() {
-        swap_panel($(".banner"), $(".stapes-wrap"));
+    $("#get_started").click(function(e) {
+        $("#start_as_wrapper").fadeIn('slow');
+    });
+
+    $("#get_started_guide").click(function() {
+        $("#start_as_wrapper").fadeOut('normal', function() {
+            swap_panel($(".banner"), $(".stapes-wrap-build-lesson"));
+        });
         // swap_panel($(".banner"), $(".stapes-wrap"));
         // swap_panel($(".step1"), $(".step3"));
 
@@ -346,7 +373,40 @@ $(document).ready(function(e) {
     });
 
     $("#step2_done").click(function(e) {
-        create_update_lession($(".step2"), $(".step5"));
+        bootbox.dialog({
+            message: "I Want To",
+            title: "Build Lesson",
+            buttons: {
+                success: {
+                    label: "Save And Exit!",
+                    className: "btn-primary",
+                    callback: function() {
+                        create_update_lession($(".stapes-wrap-build-lesson"), $(".banner"));
+                    }
+                },
+                warning: {
+                    label: "Save And Continue!",
+                    className: "btn-primary",
+                    callback: function() {
+                        create_update_lession($(".step2"), $(".step2"));
+                    }
+                },
+                danger: {
+                    label: "Finish",
+                    className: "btn-primary",
+                    callback: function() {
+                        create_update_lession($(".step2"), $(".step5"));
+                    }
+                },
+                main: {
+                    label: "Cancel",
+                    className: "btn-primary",
+                    callback: function() {
+
+                    }
+                }
+            }
+        });
     });
 
     $("#create_skit_step2").click(function(e) {
@@ -366,12 +426,49 @@ $(document).ready(function(e) {
     });
 
     $("#step3_done").click(function(e) {
-        bootbox.confirm("Do you want to save?", function(result) {
-            if (result) {
-                create_update_skit($(".step3"), $(".step5"));
-            } else {
-                swap_panel($(".step3"), $(".step5"));
-                $("#skit_form")[0].reset();
+//        bootbox.confirm("Do you want to save?", function(result) {
+//            if (result) {
+//                create_update_skit($(".step3"), $(".step5"));
+//            } else {
+//                swap_panel($(".step3"), $(".step5"));
+//                $("#skit_form")[0].reset();
+//            }
+//        });
+
+        bootbox.dialog({
+            message: "I Want To",
+            title: "Build Lesson",
+            buttons: {
+                success: {
+                    label: "Save And Exit!",
+                    className: "btn-primary",
+                    callback: function() {
+                        create_update_skit($(".stapes-wrap-build-lesson"), $(".banner"));
+                    }
+                },
+                warning: {
+                    label: "Save And Continue!",
+                    className: "btn-primary",
+                    callback: function() {
+                        create_update_skit($(".step3"), $(".step3"));
+                    }
+                },
+                danger: {
+                    label: "Finish",
+                    className: "btn-primary",
+                    callback: function() {
+                        validate_form = false;
+                        create_update_skit($(".step3"), $(".step5"));
+                        validate_form = true;
+                    }
+                },
+                main: {
+                    label: "Cancel",
+                    className: "btn-primary",
+                    callback: function() {
+
+                    }
+                }
             }
         });
     });
@@ -385,12 +482,48 @@ $(document).ready(function(e) {
     });
 
     $("#step4_done").click(function(e) {
-        bootbox.confirm("Do you want to save?", function(result) {
-            if (result) {
-                create_update_quiz($(".step4"), $(".step5"));
-            } else {
-                swap_panel($(".step4"), $(".step5"));
-                $("#question_form")[0].reset();
+//        bootbox.confirm("Do you want to save?", function(result) {
+//            if (result) {
+//                create_update_quiz($(".step4"), $(".step5"));
+//            } else {
+//                swap_panel($(".step4"), $(".step5"));
+//                $("#question_form")[0].reset();
+//            }
+//        });
+        bootbox.dialog({
+            message: "I Want To",
+            title: "Build Lesson",
+            buttons: {
+                success: {
+                    label: "Save And Exit!",
+                    className: "btn-primary",
+                    callback: function() {
+                        create_update_quiz($(".stapes-wrap-build-lesson"), $(".banner"));
+                    }
+                },
+                warning: {
+                    label: "Save And Continue!",
+                    className: "btn-primary",
+                    callback: function() {
+                        create_update_quiz($(".step4"), $(".step4"));
+                    }
+                },
+                danger: {
+                    label: "Finish",
+                    className: "btn-primary",
+                    callback: function() {
+                        validate_form = false;
+                        create_update_quiz($(".step4"), $(".step5"));
+                        validate_form = true;
+                    }
+                },
+                main: {
+                    label: "Cancel",
+                    className: "btn-primary",
+                    callback: function() {
+
+                    }
+                }
             }
         });
     });
@@ -439,7 +572,7 @@ $(document).ready(function(e) {
             if ($.browser.msie && parseFloat(jQuery.browser.version) <= 9.0) {
                 $("#skit_preview_image")[0].filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = $(this).val();
             } else {
-                if (typeof(FileReader) != "undefined") {
+                if (typeof (FileReader) != "undefined") {
                     var reader = new FileReader();
                     reader.onload = function(e) {
                         $("#skit_preview_image").attr("src", e.target.result);
@@ -509,8 +642,8 @@ function upload_file(file_type, file_input, file_name_div) {
     $('#upload_form').attr("action", full_path + "/ajax-upload-files");
 
     $('#upload_form')
-        .find("input")
-        .attr("name", "upload_file");
+            .find("input")
+            .attr("name", "upload_file");
 
     $("<input type='hidden' name='file_type' value='" + file_type + "' />").appendTo($("#upload_form"));
 
@@ -659,8 +792,16 @@ function create_update_skit(hide_div, show_div) {
         error_msg = "Please select an image";
     }
 
-    if (error_msg != "") {
+    if (error_msg != "" && validate_form == true) {
         showJsError(error_msg);
+    } else if (error_msg != "" && validate_form == false) {
+        $("#skit_form")[0].reset();
+        $("#skit_preview_image").attr("src", "");
+        swap_panel(hide_div, show_div);
+
+        $("input[name='video_file_name']").val("");
+        $("input[name='audio_file_name']").val("");
+        $("input[name='image_file_name']").val("");
     } else {
 
         $('#skit_form').attr("action", full_path + "/ajax-create-update-skit");
@@ -718,6 +859,7 @@ function create_update_skit(hide_div, show_div) {
 function create_update_quiz(hide_div, show_div) {
     var error_msg = "";
     var answer_checked = $(".chkbox:checked").length;
+    var value_present=false;
     //    console.debug(answer_checked);
 
     $(".answer_holder").css("border", "solid 1px #ececec");
@@ -727,8 +869,10 @@ function create_update_quiz(hide_div, show_div) {
         error_msg = "Please enter Image or Audio or Text for question";
         $(".question_holder").css("border", "solid 1px brown");
     } else if (answer_checked == 0) {
+        value_present=true;
         error_msg = "Please select correct answer(s) from the checkboxes at the right";
     } else {
+        value_present=true;
         var checked_elements = $(".chkbox:checked");
         var all_found = true;
         $.each(checked_elements, function(index, elem) {
@@ -743,8 +887,17 @@ function create_update_quiz(hide_div, show_div) {
         });
     }
 
-    if (error_msg != "") {
+    if (error_msg != "" && validate_form == true) {
         showJsError(error_msg);
+    } else if (error_msg != "" && value_present==true && validate_form == false) {
+        showJsError(error_msg);
+    } else if (error_msg != "" && value_present==false && validate_form == false) {
+        $("#question_form")[0].reset();
+        $(".file_name_holder").html("");
+        $(".audio_name,.image_name").val("");
+        $("input[name='image_file_name_1']").val("");
+        $("input[name='audio_file_name_1']").val("");
+        swap_panel(hide_div, show_div);
     } else {
 
         var bar = $('.bar');

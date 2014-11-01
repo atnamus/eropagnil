@@ -9,6 +9,49 @@ class AjaxController extends FrontController {
         $this->all_function = new AllFunction();
     }
 
+    function actionAjaxcalendar() {
+        $request = Yii::app()->request;
+        if ($request->isAjaxRequest) {
+            $month = $request->getPost("month");
+            $month = ($month == "") ? date("m") : $month;
+
+            $year = $request->getPost("year");
+            $year = ($year == "") ? date("Y") : $year;
+
+            $user_id = $request->getPost("user_id");
+
+            $data_msg = array();
+            $data_msg['month'] = $month;
+            $data_msg['year'] = $year;
+
+            $start_date = $year . "-" . $month . "-01";
+
+            $end_date = date('Y-m-d', strtotime("+1 month", strtotime($start_date)));
+
+            $criteria = new CDbCriteria();
+
+            $criteria->addCondition("t.user_id='" . $user_id . "'");
+
+            $criteria->addBetweenCondition("t.create_at", $start_date, $end_date, 'AND');
+
+            $corrections = Correction::model()->findAll($criteria);
+
+            $events = array();
+
+            foreach ($corrections as $key => $val) {
+                $date = new DateTime($val->create_at);
+
+                $events[] = array(
+                    "rdate" => $date->getTimestamp(),
+                    "html" => "Correction"
+                );
+            }
+
+            $data_msg['events'] = $events;
+            $this->renderPartial("/_my_calendar", $data_msg);
+        }
+    }
+
     function actionAjaxdeletelesson() {
         $request = Yii::app()->request;
         if ($request->isAjaxRequest) {
@@ -17,6 +60,15 @@ class AjaxController extends FrontController {
                 'status' => 3
             ));
 
+            echo json_encode(array("status" => "success"));
+        }
+    }
+
+    function actionAjaxchoosestartas() {
+        $request = Yii::app()->request;
+        if ($request->isAjaxRequest) {
+            $user_type = $request->getPost("user_type");
+            Yii::app()->user->setState("user_type", $user_type);
             echo json_encode(array("status" => "success"));
         }
     }
@@ -932,6 +984,44 @@ class AjaxController extends FrontController {
         }
     }
 
+    public function actionAjaxfetchusercorrections() {
+        if (Yii::app()->request->isAjaxRequest) {
+
+            $data_msg = array();
+
+            $request = Yii::app()->request;
+
+            $user_id = $request->getPost("user_id");
+            $date = $request->getPost("date");
+
+            $start = Yii::app()->request->getPost("start");
+
+            $start = ($start == "") ? 0 : $start;
+
+            $criteria = new CDbCriteria();
+            
+
+            $criteria->addCondition("t.user_id='$user_id'");
+            $criteria->addCondition("t.status!='3'");
+            $criteria->addSearchCondition('t.create_at', $date);
+            
+            $criteria->limit=10;
+            $criteria->offset=$start;
+            
+            $criteria->order = 't.create_at DESC';
+
+            $corrections = Correction::model()->with("user", "language")->findAll($criteria);
+
+            $my_corrections = "";
+
+            $visitor_str = '';
+
+            $data_msg['corrections'] = $corrections;
+
+            $this->renderPartial("/_user_corrections", $data_msg);
+        }
+    }
+
     public function actionAjaxloadcorrections() {
         if (Yii::app()->request->isAjaxRequest) {
 
@@ -1033,6 +1123,107 @@ class AjaxController extends FrontController {
 
             $data_msg['correction_visitors'] = $visitor_str;
 
+            $correction_recieved = "";
+
+//            $criteria = new CDbCriteria();
+//            $criteria->addCondition("correction.user_id='" . $this->user_id . "'");
+//            $criteria->addCondition("t.comment_type='1'");
+//            $criteria->addCondition("t.status!='3'");
+//            $criteria->addCondition("correction.status!='3'");
+//
+//            $recieved_corrections = CorrectionComments::model()->with("correction","user")->findAll();
+//
+//            foreach ($recieved_corrections as $key => $val) {
+//                $title = $val['correction']->title;
+//                if ($val['correction']->title == "") {
+//                    $expl = explode("\n", $val['correction']->intro_text);
+//                    if (count($expl) > 0) {
+//                        $title = $expl[0];
+//                    } else {
+//                        $title = $val['correction']->intro_text;
+//                    }
+//                }
+//                $correction_recieved.='<div class="achiv-list">
+//                        <div class="row">
+//                            <div class="col-sm-2">
+//                                <div class="author-les">
+//                                    <div class="author-img">
+//                                        <a href="javascript:void(0)"><img src="' . $this->profile_image_path . '/' . (($val['user']->profile_image != "") ? $val['user']->profile_image : $this->default_profile_pic) . '" alt=""></a>
+//                                    </div>
+//                                    <h3>' . $val['user']->full_name . '</h3>
+//                                </div>                                    
+//                            </div>
+//                            <div class="col-sm-10">
+//                                <span class="ent-auth">' . $val['user']->full_name . '</span>
+//                                <h3><a href="' . $this->createUrl("correction-details/" . $val['correction']->display_id) . '" class="">' . $title . '</a></h3>
+//                                <p>' . $val['correction']->intro_text . '</p>
+//                                <div class="row">
+//                                    <div class="col-md-6 corct-pdate">' . date("M d, Y H:i", strtotime($val->create_at)) . '</div>
+//                                    <div class="col-md-6 text-right">
+//                                        <ul class="journal_status pull-right">
+//                                            <li class="corrections_num active-bt">' . $val['correction']->total_corrections . '</li>
+//                                            <li class="studying">' . $val['correction']['language']->name . '</li>
+//                                        </ul>
+//                                    </div>
+//                                </div>
+//                            </div>
+//                        </div>
+//                    </div>';
+//            }
+
+            $data_msg['correction_recieved'] = $correction_recieved;
+
+            $correction_made = "";
+
+            $criteria = new CDbCriteria();
+            $criteria->addCondition("t.user_id='" . $this->user_id . "'");
+            $criteria->addCondition("t.comment_type='0'");
+            $criteria->addCondition("t.parent_id='0'");
+            $criteria->addCondition("t.status!='3'");
+            $criteria->addCondition("correction.status!='3'");
+
+            $made_corrections = CorrectionComments::model()->with("correction", "user")->findAll($criteria);
+
+            foreach ($made_corrections as $key => $val) {
+                $title = $val['correction']->title;
+                if ($val['correction']->title == "") {
+                    $expl = explode("\n", $val['correction']->intro_text);
+                    if (count($expl) > 0) {
+                        $title = $expl[0];
+                    } else {
+                        $title = $val['correction']->intro_text;
+                    }
+                }
+
+                $correction_made.='<div class="achiv-list">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <div class="author-les">
+                                    <div class="author-img">
+                                        <a href="javascript:void(0)"><img src="' . $this->profile_image_path . '/' . (($val['correction']['user']->profile_image != "") ? $val['correction']['user']->profile_image : $this->default_profile_pic) . '" alt=""></a>
+                                    </div>
+                                    <h3>' . $val['correction']['user']->full_name . '</h3>
+                                </div>
+                            </div>
+                            <div class="col-sm-10">
+                                <span class="ent-auth">' . $val['correction']['user']->full_name . '</span>
+                                <h3><a href="' . $this->createUrl("correction-details/" . $val['correction']->display_id) . '" class="">' . $title . '</a></h3>
+                                <p>' . $val['correction']->intro_text . '</p>
+                                <div class="row">
+                                    <div class="col-md-6 corct-pdate">' . date("M d, Y H:i", strtotime($val->create_at)) . '</div>
+                                    <div class="col-md-6 text-right">
+                                        <ul class="journal_status pull-right">
+                                            <li class="corrections_num active-bt">' . $val['correction']->total_corrections . '</li>
+                                            <li class="studying">' . $val['correction']['language']->name . '</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>';
+            }
+
+            $data_msg['correction_made'] = $correction_made;
 
             echo json_encode($data_msg);
         }
@@ -1042,6 +1233,7 @@ class AjaxController extends FrontController {
         $request = Yii::app()->request;
         if ($request->isAjaxRequest) {
             $data_msg = array();
+            $comment_type = $request->getPost("comment_type");
 
             $comment = new CorrectionComments();
 
@@ -1050,6 +1242,7 @@ class AjaxController extends FrontController {
             $comment->user_id = $this->user_id;
             $comment->comment_text = strip_tags($request->getPost("comment_box"));
             $comment->correction_id = $correction_id;
+            $comment->comment_type = $comment_type;
             $comment->create_at = date("Y-m-d H:i:s");
             $comment->status = "1";
             if ($comment->validate()) {
@@ -1061,37 +1254,109 @@ class AjaxController extends FrontController {
                 $main_lines = $request->getPost("main_line");
                 $corrected_line = $request->getPost("corrected_line");
                 $line_perfect = $request->getPost("line_perfect");
-                $correction_comment = $request->getPost("correction_comment");
+                $correction_comment = $request->getPost("correction_comments");
 
-                foreach ($main_lines as $key => $val) {
-                    $user_correction = new UserCorrection();
-                    $user_correction->id = NULL;
-                    $user_correction->setIsNewRecord(true);
-                    $user_correction->comment_id = $comment_id;
-                    $user_correction->main_line = $val;
-                    $user_correction->corrected_line = $corrected_line[$key];
-                    $user_correction->correction_id = $correction_id;
-                    $user_correction->correction_type = $line_perfect[$key];
-                    $user_correction->user_id = $this->user_id;
-                    $user_correction->comment = $correction_comment[$key];
-                    $user_correction->create_at = date("Y-m-d H:i:s");
-                    $user_correction->status = "1";
-                    $user_correction->save();
+                if ($comment_type == "0") {
+                    foreach ($main_lines as $key => $val) {
+                        $user_correction = new UserCorrection();
+                        $user_correction->id = NULL;
+                        $user_correction->setIsNewRecord(true);
+                        $user_correction->comment_id = $comment_id;
+                        $user_correction->main_line = $val;
+                        $user_correction->corrected_line = $corrected_line[$key];
+                        $user_correction->correction_id = $correction_id;
+                        $user_correction->correction_type = $line_perfect[$key];
+                        $user_correction->user_id = $this->user_id;
+                        $user_correction->comment = $correction_comment[$key];
+                        $user_correction->create_at = date("Y-m-d H:i:s");
+                        $user_correction->status = "1";
+                        $user_correction->save();
+                    }
                 }
 
                 $criteria = new CDbCriteria();
                 $criteria->select = "count(t.id) as Total";
                 $criteria->addCondition("t.correction_id='$correction_id'");
+                $criteria->addCondition("t.comment_type='0'");
+                $total_correction_data = CorrectionComments::model()->find($criteria);
 
-                $data = CorrectionComments::model()->find($criteria);
-                $correction_model=  Correction::model()->findByPk($correction_id);
-                $correction_model->total_corrections=$data->Total;
+                $criteria = new CDbCriteria();
+                $criteria->select = "count(t.id) as Total";
+                $criteria->addCondition("t.correction_id='$correction_id'");
+                $criteria->addCondition("t.comment_type='1'");
+                $total_comment_data = CorrectionComments::model()->find($criteria);
+
+                $correction_model = Correction::model()->findByPk($correction_id);
+                $correction_model->total_corrections = $total_correction_data->Total;
+                $correction_model->total_comments = $total_comment_data->Total;
                 $correction_model->save();
 
                 $data_msg['status'] = "success";
             }
 
             echo json_encode($data_msg);
+        }
+    }
+
+    function actionAjaxpostchildcomment() {
+        $request = Yii::app()->request;
+        if ($request->isAjaxRequest) {
+            $comment_text = strip_tags($request->getPost("comment_text"));
+            $parent_id = strip_tags($request->getPost("parent_id"));
+            $correction_id = strip_tags($request->getPost("correction_id"));
+
+            $comment = new CorrectionComments();
+
+            $comment->user_id = $this->user_id;
+            $comment->comment_text = $comment_text;
+            $comment->correction_id = $correction_id;
+            $comment->parent_id = $parent_id;
+            $comment->comment_type = "1";
+            $comment->create_at = date("Y-m-d H:i:s");
+            $comment->status = "1";
+            $comment->save();
+
+            $criteria = new CDbCriteria();
+            $criteria->select = "count(t.id) as Total";
+            $criteria->addCondition("t.correction_id='$correction_id'");
+            $criteria->addCondition("t.comment_type='0'");
+            $total_correction_data = CorrectionComments::model()->find($criteria);
+
+            $criteria = new CDbCriteria();
+            $criteria->select = "count(t.id) as Total";
+            $criteria->addCondition("t.correction_id='$correction_id'");
+            $criteria->addCondition("t.comment_type='1'");
+            $total_comment_data = CorrectionComments::model()->find($criteria);
+
+            $correction_model = Correction::model()->findByPk($correction_id);
+            $correction_model->total_corrections = $total_correction_data->Total;
+            $correction_model->total_comments = $total_comment_data->Total;
+            $correction_model->save();
+
+            $this->renderPartial("/child_comments", array("parent_id" => $parent_id));
+        }
+    }
+
+    public function actionAjaxfollowuser() {
+        $request = Yii::app()->request;
+
+        if ($request->isAjaxRequest) {
+
+            $following_user_id = $request->getPost("following_id");
+
+            $follow = UserFollow::model()->findByAttributes(array("follower_id" => $this->user_id, "following_id" => $following_user_id, "status" => "1"));
+            if (empty($follow)) {
+                $follow_model = new UserFollow();
+                $follow_model->follower_id = $this->user_id;
+                $follow_model->following_id = $following_user_id;
+                $follow_model->create_at = date("Y-m-d H:i:s");
+                $follow_model->status = "1";
+                $follow_model->save();
+            } else {
+                $follow->delete();
+            }
+
+            echo json_encode(array("status" => "success"));
         }
     }
 

@@ -6,7 +6,7 @@ $this->breadcrumbs = array(
 ?><div>
     <h1 style="display: inline">Manage SEO</h1>
     <div class="pull-right">
-        <a href="<?php echo $this->createUrl('seo/create/') ?>" class="btn <?php echo $this->add_button; ?>">Add NEW SEO</a>        
+        <a href="<?php echo $this->createUrl('seo/create/') ?>" class="btn <?php echo $this->add_button; ?>">Add New SEO</a>        
     </div>
 </div>
 <br/>

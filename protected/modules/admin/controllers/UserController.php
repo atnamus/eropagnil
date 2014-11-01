@@ -47,7 +47,6 @@ class UserController extends AdminController {
         $model = new AdUser;
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
-
         if (isset($_POST['AdUser'])) {
             $model->attributes = $_POST['AdUser'];
             $model->scenario = 'create';

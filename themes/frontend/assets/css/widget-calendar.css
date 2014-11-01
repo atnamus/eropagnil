@@ -1,0 +1,152 @@
+ /*
+ 	* 	Events added by :
+ 	* 	Sneh Sagar
+ 	* 	http://itobuz.com	
+ 	* /
+/*
+  * This Calendar Application was designed by:
+  *
+  *         Kyle Ferreira
+  *         http://www.SterlingSavvy.com
+  *
+  * Credits for following the template of:
+  *
+  *         David Walsh
+  *        http://davidwalsh.name/php-calendar
+  *
+  * You are free and welcome to use and manipulate this code as you wish.
+  * Please keep a reference to those who helped shape it (ie: the sources above)
+  */
+  
+/*     If you wish to make a second calendar class just duplicate this css and change the calendar key words
+     to that of the new calendar class you want to use. Like maybe calendar2.
+     then when you call the instance of the class of the calendar make sure to specify the style in the
+     parameters of the constructor
+*/
+/* calendar */
+/* by not setting a table width you get a table that will cover the size of the div or page you put it in  */
+table.calendar {
+     /*border-left:1px solid #ccc;*/
+	 width:100%;
+}
+/* Settings for the control menu */
+table.calendar-control {
+     width: 100%;
+     text-align: center;
+}
+/* This changes the select month and select year drop down menus */
+table.calendar-control-select {  
+}
+
+tr.calendar-row {  
+}
+td.calendar-day, td.calendar-weekend-day, td.calendar-current-day {
+     
+     font-size:11px;
+     position:relative;
+     vertical-align: top;
+     line-height: 4px; /* This determins the space that will  space out the events on the calendar */
+}
+* html div.calendar-day, div.calendar-weekend-day, div.calendar-current-day {
+     height:20px;
+}
+/* This alters the headings (the days of the week) Change the colour and background for those here */
+td.calendar-day-head {
+    /* background:#CCC;*/
+     color: #666;
+     /*font-weight:bold;*/
+     text-align:center;
+     width:20px;
+     padding:5px;
+	 font-size:14px;
+     border-bottom:1px solid #ccc;
+     /*border-top:1px solid #999;
+     border-right:1px solid #999;*/
+}
+/* Change these colours to alter the respective portion of the calendar */
+
+td.calendar-day    {
+     background-color: #64b0d2;
+}
+td.calendar-weekend-day    {
+     background-color: #CFCFCF;
+}
+td.calendar-current-day    {
+     background-color: #fff !important;
+}
+
+td.calendar-current-day .calendar-day-number a  {
+  color:#64b0d2 !important;
+}
+
+td.have-event .calendar-day-number   {
+   background:#FFAA66;
+}
+
+td.have-event .calendar-day-number a   {
+    color:#fff;
+}
+
+/* These colours are for the mouse over effects on the calendar */
+
+td.calendar-day:hover {
+     background:#fff; color:#000;
+}
+
+td.calendar-day:hover .calendar-day-number a {
+    color:#64b0d2;
+}
+
+
+td.calendar-day:hover .calendar-day-number{ color:#64b0d2 !important;}
+
+td.calendar-weekend-day:hover {
+     background:#D7DADF;
+}
+td.calendar-current-day:hover {
+     background:#E5E7ED;
+}
+
+/* background colour of the blank dates */
+td.calendar-day-np {
+     background:#64b0d2;
+     min-height:1;
+}
+* html div.calendar-day-np {
+     height:20px; }
+/* This alters the number dates of the calendar */
+div.calendar-day-number {
+     position: relative;	 
+     color:#fff;
+     font-weight:bold;
+     text-align:center;
+     line-height: normal;
+}
+
+div.calendar-day-number a { display:block; color:#fff; padding:15px; }
+
+/* This alters the text section for events on the calendar. */
+div.calendar-text {
+     color:#111;    
+}
+div.calendar-text a {
+     color: #111;
+     text-decoration: none;
+}
+div.calendar-text a:hover {
+     color: #333;
+     text-decoration: underline;
+}
+/* shared */
+td.calendar-day,td.calendar-current-day, td.calendar-weekend-day, td.calendar-day-np {
+   
+   
+     border-bottom:1px solid #ccc; 
+     border-right:1px solid #ccc;
+}
+
+
+#calForm h2{ font-size:20px; font-weight:bold; text-transform:uppercase; float:left; width:295px;}
+
+.cal-nav-prev{ float:left; padding-top:20px; background: url(../images/cal-arrow-left.png) 0px 20px no-repeat; width:20px;}
+.cal-nav-next{ float:right; padding-top:20px; background: url(../images/cal-arrow-right.png) -6px 20px no-repeat; width:20px;}

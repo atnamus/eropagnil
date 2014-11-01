@@ -33,6 +33,9 @@ class User extends CActiveRecord {
 
     public $confirm_password;
     public $tmp_scenario;
+    public $old_password;
+    public $new_password;
+    public $repeat_password;
 
     /**
      * Returns the static model of the specified AR class.
@@ -55,8 +58,8 @@ class User extends CActiveRecord {
      */
     public function rules() {
         return array(
-            array('gender,language_id', 'required', 'on' => 'settings_update'),
-            array('full_name,username, email,password', 'required', 'on' => 'signup'),
+            array('full_name,gender,language_id', 'required', 'on' => 'settings_update'),
+            array('username, email,password', 'required', 'on' => 'signup'),
 //            array('email', 'email','message'=>"Invalid email address", 'on' => 'signup'),
             array('full_name,username, email,password,confirm_password,user_type_id, birthday, gender, language_id, profile_image, membership_id, activation_code, reset_key, create_at, update_at', 'required', 'on' => 'other'),
             array('username', 'checkUserName', 'on' => 'signup'),
@@ -73,7 +76,19 @@ class User extends CActiveRecord {
             array('reset_key', 'length', 'max' => 40),
             array('status', 'length', 'max' => 8),
             array('id, username, email, user_type_id, password, full_name, birthday, gender, language_id, profile_image, sound_effect, microphone, speaker, activation_code, reset_key, status, create_at, update_at', 'safe', 'on' => 'search'),
+            array('old_password', 'required', 'on' => 'changePwd'),
+            array('old_password', 'findPasswords', 'on' => 'changePwd'),
+             array('new_password', 'required', 'on' => 'changePwd'),
+            array('repeat_password', 'compare', 'compareAttribute' => 'new_password', 'on' => 'changePwd'),
         );
+    }
+
+    public function findPasswords($attribute, $params) {
+        $user = User::model()->findByPk(Yii::app()->user->id);
+        //var_dump($this->getError('old_password'));
+        if ($this->getError('old_password') == NULL && $user->password != md5($this->old_password)) {
+            $this->addError($attribute, 'Old password is incorrect.');
+        }
     }
 
     /**

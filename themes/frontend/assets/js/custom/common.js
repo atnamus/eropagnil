@@ -1,4 +1,59 @@
-$(document).ready(function(e) {
+// To extend default options of toast-message
+$.extend(true, $.simplyToast.defaultOptions,
+        {
+            appendTo: "body",
+            customClass: false,
+            type: "info", //success,info,danger,warning
+            offset: {
+                from: "top",
+                amount: 20
+            },
+            align: "right",
+            minWidth: 250,
+            maxWidth: '90%',
+            delay: 6000,
+            allowDismiss: true,
+            spacing: 100
+        });
+$(document).ready(function() {    
+    $("form.ajax-submit").submit(function(event) {
+        event.preventDefault();
+        var $form = $(this),
+                data = $form.serialize(),
+                url = $form.attr("action");
+        var request = $.ajax({
+            url: url,
+            type: "POST",
+            data: data,
+            dataType: "json"
+        });
+        request.done(function(data) {
+            $(".msg").html('');
+            $(".has-error").removeClass('has-error');
+            if (data.fail) {
+                /*$.each(data.errors, function(index, value) {
+                 row = $("input[name='" + index + "']").closest("div.form-group");
+                 if (!row.length) {
+                 row = $("select[name='" + index + "']").closest("div.form-group");
+                 }
+                 row.addClass("has-error");
+                 row.find(".msg").html("<span class='help-inline'>" + value + "</span>");
+                 });*/
+            }//has error
+            if (data.success) {
+                //Admin.ShowSuccess(data.message);
+                // if (_method !== 'PUT')
+                // $form[0].reset();
+            } //success
+        }); //done
+        request.always(function() {
+
+        });
+        request.fail(function() {
+            alert("error");
+        });
+    });
+
     $("#go_forgotsignin").click(function(e) {
         $("#login_box").fadeOut('normal', function(e) {
             $("#forgotpass_box").fadeIn();
@@ -48,10 +103,12 @@ function show_js_loader(show)
 {
     if (show == true) {
         var str = '<img src="' + assets_path + 'images/loader.gif' + '" height="30" />';
-        $(".errorJsSummary").stop().attr("style", "display:none;").fadeIn('slow').html(str);
+        $(".errorJsSummary").stop().attr("style", "display:none;").addClass("top_loader").fadeIn('slow').html(str);
         return true;
     } else if (show == false) {
-        $(".errorJsSummary").stop().fadeOut('slow');
+        $(".errorJsSummary").stop().fadeOut('slow', function(e) {
+            $(".errorJsSummary").removeClass("top_loader");
+        });
         return true;
     }
 }
@@ -94,13 +151,14 @@ function dologin(e)
     if (msg != "") {
         showError(msg);
     } else {
-        show_loader();
+        show_js_loader(true);
         $.ajax({
             url: $("#form_login").attr("action"),
             type: "post",
             dataType: "json",
             data: $("#form_login").serialize(),
             success: function(resp) {
+                show_js_loader(false);
                 if (resp.status == "success") {
                     window.location.href = member_url;
                 } else if (resp.status == "error") {

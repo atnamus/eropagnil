@@ -27,6 +27,7 @@
 class Correction extends AdminModel {
     
     public $Total;
+    public $TotRecieved;
 
     /**
      * Returns the static model of the specified AR class.
@@ -97,22 +98,34 @@ class Correction extends AdminModel {
     }
 
     public function get_correction_counts($user_id=0) {
-        
+
         $data_msg=array();
-        
-        $entries_written = 0;
-        
+
         $criteria = new CDbCriteria();
-        
-        $criteria->select="count(id) as `Total`";
-        
+
+        $criteria->select="count(id) as `Total`,sum(total_corrections) as `TotRecieved`";
+
         $criteria->addCondition("t.user_id='".$user_id."'");
         $criteria->addCondition("t.status!='3'");
-        
+
         $data = Correction::model()->find($criteria);
-        
+
         $data_msg['entries_written']=$data->Total;
         
+        $data_msg['corrections_recieved']=$data->TotRecieved;
+        
+        $criteria = new CDbCriteria();
+
+        $criteria->select="count(id) as `Total`";
+
+        $criteria->addCondition("t.user_id='".$user_id."'");
+        $criteria->addCondition("t.comment_type='0'");
+        $criteria->addCondition("t.status!='3'");
+        
+        $data = CorrectionComments::model()->find($criteria);
+        
+        $data_msg['correction_made']=$data->Total;
+
         return $data_msg;
     }
 

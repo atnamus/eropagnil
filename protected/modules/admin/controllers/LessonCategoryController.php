@@ -32,7 +32,7 @@ class LessonCategoryController extends AdminController {
     /**
      * Manages all models.
      */
-    public function actionIndex() {       
+    public function actionIndex() {
         $model = new LessonCategory('search');
         $model->unsetAttributes();  // clear any default values
         if (isset($_GET['LessonCategory']))
@@ -66,8 +66,8 @@ class LessonCategoryController extends AdminController {
         if (isset($_POST['LessonCategory'])) {
             $model->attributes = $_POST['LessonCategory'];
             if ($model->save()) {
-                Yii::app()->user->setFlash('success_msg', "LessonCategory created successfully");
-               // $this->redirect(array('update', 'id' => $model->id));
+                Yii::app()->user->setFlash('success_msg', "Lesson Category created successfully");
+                // $this->redirect(array('update', 'id' => $model->id));
                 $this->redirect(array('Index'));
             }
         }
@@ -84,14 +84,10 @@ class LessonCategoryController extends AdminController {
      */
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
-
-// Uncomment the following line if AJAX validation is needed
-// $this->performAjaxValidation($model);
-
         if (isset($_POST['LessonCategory'])) {
             $model->attributes = $_POST['LessonCategory'];
             if ($model->save()) {
-                Yii::app()->user->setFlash('success_msg', "LessonCategory updated successfully");
+                Yii::app()->user->setFlash('success_msg', "Lesson Category updated successfully");
                 $this->redirect(array('update', 'id' => $model->id));
             }
         }

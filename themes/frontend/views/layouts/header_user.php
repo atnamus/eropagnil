@@ -14,32 +14,57 @@
                 ?>
                                 </div>-->
                 <ul class="nav navbar-nav pull-right">
-                    <li class="home"><a href="#">home</a></li>
-                    <li class="nav-post"><a href="<?php echo $this->createUrl("/post-correction"); ?>">Post</a></li>
-                    <li class="nav-corr"><a href="<?php echo $this->createUrl("/correction-list"); ?>">Correct</a></li>
-                    <li class="nav-help"><a href="#">Help</a></li>
-<!--                    <li>
+                    <li class="home"><a href="<?php echo $this->createUrl("home/Memberhome"); ?>">home</a></li>
+                    <?php
+                    if ($this->user_type_id == "2" || $this->user_type_id == "3") {
+                        ?>
+                        <li class="nav-post"><a href="<?php echo $this->createUrl("/post-correction"); ?>">Post</a></li>
+                        <li class="nav-corr"><a href="<?php echo $this->createUrl("/correction-list"); ?>">Correct</a></li>
                         <?php
+                    }
+                    ?>
+                    <li class="nav-help"><a href="#">Help</a></li>
+                    <!--                    <li>
+                    <?php
 //                        echo CHtml::ajaxLink('CLICK', $this->createUrl("/profile/" . $this->username), array(
 //                            'type' => 'POST',
 //                            'update' => '#main_site_container'),array('onClick'=>'show_loader()'));
-                        ?>
-                    </li>-->
+                    ?>
+                                        </li>-->
                     <li class="dropdown dropdown-user">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
                             <img alt="" class="img-circle" src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/uploads/images/profile_pic/<?php echo $this->profile_pic; ?>" style="height:45px">
-                            <span class="username username-hide-on-mobile"><?php echo $this->first_name." ".$this->last_name; ?> </span>
+                            <span class="username username-hide-on-mobile"><?php echo $this->first_name . " " . $this->last_name; ?> </span>
                             <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li>
-                                <a href="<?php echo $this->createUrl("/profile/" . $this->username); ?>">
-                                    <i class="icon-user"></i> My Profile </a>
-                            </li>
-                            <li>
-                                <a href="<?php echo $this->createUrl("profile/Settings"); ?>">
-                                    <i class="icon-user"></i> My Account </a>
-                            </li>
+                            <?php
+                            if ($this->user_type_id == "2" || $this->user_type_id == "3"):
+                                ?>
+                                <li>
+                                    <a href="<?php echo $this->createUrl("/profile/" . $this->username); ?>">
+                                        <i class="icon-user"></i> My Profile </a>
+                                </li>
+                                <?php
+                            endif;
+                            ?>
+                            <?php
+                            if ($this->user_type_id == "2" || $this->user_type_id == "3"){
+                                ?>
+                                <li>
+                                    <a href="<?php echo $this->createUrl("profile/Settings"); ?>">
+                                        <i class="icon-user"></i> My Account </a>
+                                </li>
+                                <?php
+                            }else{
+                                ?>
+                                <li>
+                                    <a href="<?php echo $this->createUrl("Organization/Settings"); ?>">
+                                        <i class="icon-user"></i> My Account </a>
+                                </li>
+                                <?php
+                            }
+                            ?>
                             <li>
                                 <a href="#">
                                     <i class="icon-envelope-open"></i> My Inbox <span class="badge badge-danger">

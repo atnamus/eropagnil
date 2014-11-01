@@ -1,40 +1,6 @@
-<script src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/js/jquery.Jcrop.min.js"></script>
-<link rel="stylesheet" href="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/css/jquery.Jcrop.css" type="text/css" />
-<style type="text/css">
-
-    /* Apply these styles only when #preview-pane has
-       been placed within the Jcrop widget */
-    .jcrop-holder #preview-pane {
-        display: block;
-        position: absolute;
-        z-index: 2000;
-        top: 10px;
-        right: -280px;
-        padding: 6px;
-        border: 1px rgba(0,0,0,.4) solid;
-        background-color: white;
-
-        -webkit-border-radius: 6px;
-        -moz-border-radius: 6px;
-        border-radius: 6px;
-
-        -webkit-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
-        -moz-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
-        box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
-    }
-
-    /* The Javascript code will set the aspect ratio of the crop
-       area based on the size of the thumbnail preview,
-       specified here */
-    #preview-pane .preview-container {
-        width: 250px;
-        height: 170px;
-        overflow: hidden;
-    }
-
-</style>
-<script>
-</script>
+<?php
+$this->renderPartial("/_build_lesson", array("stages" => $stages, "languages" => $all_languages));
+?>
 <div class="learner_public_profile">
     <div class="container">
         <div class="learn_pp">
@@ -336,7 +302,7 @@
                                                                 <!--<div class="col-md-6 corct-pdate">Sep 1, 2014 05:53</div>-->
                                                                 <div class="col-md-6 text-right">
                                                                     <ul class="journal_status pull-right">
-                                                                        <li class="studying"><a href='javascript:void(0)'>Edit</a></li>
+                                                                        <li class="studying"><a class="edit_lesson" data-lessonid="<?php echo $val->id; ?>" href='javascript:void(0)'>Edit</a></li>
                                                                     </ul>
                                                                 </div>
                                                             </div>
@@ -476,114 +442,11 @@
                                                 </div>
                                             </div>
                                             <div class="tab-pane fade" id="corctReciv">
-                                                <div class="achiv-list">
-                                                    <div class="row">
-                                                        <div class="col-sm-2">
-                                                            <div class="author-les">
-                                                                <div class="author-img">
-                                                                    <a href=""><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/images/ch-less01.jpg" alt=""></a>
-                                                                </div>
-                                                                <h3>krish Dey</h3>
-                                                            </div>                                    
-                                                        </div>
-                                                        <div class="col-sm-10">
-                                                            <span class="ent-auth">Krish Dey</span>
-                                                            <h3><a href="#" class="">Hello!! Thank you very much for inviting me.</a></h3>
-                                                            <p>Today is Chuushuu no Meigetsu. August 15th of the lunar calendar is called Chushu. Today, we can see the most beautiful moon in the year....</p>
-                                                            <div class="row">
-                                                                <div class="col-md-6 corct-pdate">Sep 1, 2014 05:53</div>
-                                                                <div class="col-md-6 text-right">
-                                                                    <ul class="journal_status pull-right">
-                                                                        <li class="corrections_num active-bt">3</li>
-                                                                        <li class="studying">English</li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="achiv-list">
-                                                    <div class="row">
-                                                        <div class="col-sm-2">
-                                                            <div class="author-les">
-                                                                <div class="author-img">
-                                                                    <a href=""><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/images/ch-less01.jpg" alt=""></a>
-                                                                </div>
-                                                                <h3>krish Dey</h3>
-                                                            </div>                                    
-                                                        </div>
-                                                        <div class="col-sm-10">
-                                                            <span class="ent-auth">Krish Dey</span>
-                                                            <h3><a href="#" class="">What are the differences among talk, tell, say, and speak?</a></h3>
-                                                            <p>I read a sentence as follows: I study English to speak fluently. I thought it was correct. A native English speaker changed it...</p>
-                                                            <div class="row">
-                                                                <div class="col-md-6 corct-pdate">Sep 1, 2014 05:53</div>
-                                                                <div class="col-md-6 text-right">
-                                                                    <ul class="journal_status pull-right">
-                                                                        <li class="corrections_num active-bt">3</li>
-                                                                        <li class="studying">English</li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="achiv-list">
-                                                    <div class="row">
-                                                        <div class="col-sm-2">
-                                                            <div class="author-les">
-                                                                <div class="author-img">
-                                                                    <a href=""><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/images/ch-less01.jpg" alt=""></a>
-                                                                </div>
-                                                                <h3>krish Dey</h3>
-                                                            </div>                                    
-                                                        </div>
-                                                        <div class="col-sm-10">
-                                                            <span class="ent-auth">Krish Dey</span>
-                                                            <h3><a href="#" class="">Today I had a phone interview, I think it went well. </a></h3>
-                                                            <p>My iPhone was stolen yesterday at Siam square, Bangkok. It was partly my fau...</p>
-                                                            <div class="row">
-                                                                <div class="col-md-6 corct-pdate">Sep 1, 2014 05:53</div>
-                                                                <div class="col-md-6 text-right">
-                                                                    <ul class="journal_status pull-right">
-                                                                        <li class="corrections_num active-bt">3</li>
-                                                                        <li class="studying">English</li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="achiv-list">
-                                                    <div class="row">
-                                                        <div class="col-sm-2">
-                                                            <div class="author-les">
-                                                                <div class="author-img">
-                                                                    <a href=""><img src="<?php echo Yii::app()->request->getBaseUrl(true); ?>/themes/frontend/assets/images/ch-less01.jpg" alt=""></a>
-                                                                </div>
-                                                                <h3>krish Dey</h3>
-                                                            </div>                                    
-                                                        </div>
-                                                        <div class="col-sm-10">
-                                                            <span class="ent-auth">Krish Dey</span>
-                                                            <h3><a href="#" class="">I will start study english Tonight. </a></h3>
-                                                            <p>"the most possible one or more than one results" i want to express...</p>
-                                                            <div class="row">
-                                                                <div class="col-md-6 corct-pdate">Sep 1, 2014 05:53</div>
-                                                                <div class="col-md-6 text-right">
-                                                                    <ul class="journal_status pull-right">
-                                                                        <li class="corrections_num active-bt">3</li>
-                                                                        <li class="studying">English</li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                
                                             </div>
                                             <div class="tab-pane fade" id="visitors">
                                                 
-                                            </div>                             
+                                            </div>
                                         </div>
                                     </div> 
                                 </div>                              
@@ -1110,62 +973,6 @@
     </center>
 </div>-->
 <script type="text/javascript">
-
-    $(document).ready(function(e) {
-        $("#change_photo_btn").click(function(e) {
-
-        });
-    });
-
-    jQuery(function($) {
-
-        // Create variables (in this scope) to hold the API and image size
-        var jcrop_api,
-                boundx,
-                boundy,
-                // Grab some information about the preview pane
-                $preview = $('#preview-pane'),
-                $pcnt = $('#preview-pane .preview-container'),
-                $pimg = $('#preview-pane .preview-container img'),
-                xsize = $pcnt.width(),
-                ysize = $pcnt.height();
-
-        console.log('init', [xsize, ysize]);
-        $('#target').Jcrop({
-            onChange: updatePreview,
-            onSelect: updatePreview,
-            aspectRatio: xsize / ysize
-        }, function() {
-            // Use the API to get the real image size
-            var bounds = this.getBounds();
-            boundx = bounds[0];
-            boundy = bounds[1];
-            // Store the API in the jcrop_api variable
-            jcrop_api = this;
-
-            // Move the preview into the jcrop container for css positioning
-            $preview.appendTo(jcrop_api.ui.holder);
-        });
-
-        function updatePreview(c)
-        {
-            if (parseInt(c.w) > 0)
-            {
-                var rx = xsize / c.w;
-                var ry = ysize / c.h;
-
-                $pimg.css({
-                    width: Math.round(rx * boundx) + 'px',
-                    height: Math.round(ry * boundy) + 'px',
-                    marginLeft: '-' + Math.round(rx * c.x) + 'px',
-                    marginTop: '-' + Math.round(ry * c.y) + 'px'
-                });
-            }
-        }
-        ;
-    });
-</script>
-<script type="text/javascript">
     $(document).ready(function() {
         $("ul#learn-tabs li").click(function(e) {
             if (!$(this).hasClass("active")) {
@@ -1190,5 +997,5 @@
     });
 </script>
 <?php
-$this->loadJs(array("custom/correction.js"));
+$this->loadJs(array("custom/correction.js","custom/editlesson.js"));
 ?>

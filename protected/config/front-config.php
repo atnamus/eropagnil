@@ -9,6 +9,9 @@ return CMap::mergeArray(
                 'application.modules.admin.models.Seo',
             ),
             'components' => array(
+                'cglobal' => array(
+                    'class' => 'application.components.CGlobal',
+                ),
                 'urlManager' => array(
 //                    'class' => 'application.components.UrlManager',
                     'urlFormat' => 'path',
@@ -49,8 +52,17 @@ return CMap::mergeArray(
                         '/reset-password/<reset_key>' => 'user/Resetpassword',
                         '/<language:\w+>/members/logout' => 'user/Logout',
                         '/members/logout' => 'user/Logout',
-                        '/<language:\w+>/profile/<username:\w+>' => 'profile/Viewprofile',
+//                        '/<language:\w+>/profile/<username:\w+>' => 'profile/Viewprofile',
+//                        '/<language:\w+>/profile/<username:[a-zA-Z0-9_-\.]+>' => 'profile/Viewprofile',
                         '/profile/<username:\w+>' => 'profile/Viewprofile',
+                        //parent/scool/company account settings
+                        '/<language:\w+>/o/account-settings' => 'Organization/Settings',
+                        '/o/account-settings' => 'Organization/Settings',
+                        '/<language:\w+>/account/sync/provider/<provider:([A-Za-z0-9-]+)>' => 'Organization/OauthLink',
+                        '/account/sync/provider/<provider:([A-Za-z0-9-]+)>' => 'Organization/OauthLink',
+                        '/account/sync/save' => 'Organization/OauthSyncSave',
+                        '/account/sync/remove' => 'Organization/OauthSyncRemove',
+                        //
                         '/<language:\w+>/account-settings' => 'profile/Settings',
                         '/account-settings' => 'profile/Settings',
                         '/<language:\w+>/post-correction' => 'correction/Post',
@@ -85,6 +97,11 @@ return CMap::mergeArray(
                         '/ajax-post-correction-comment' => 'ajax/Ajaxpostcorrectioncomment',
                         '/ajax-like-comment' => 'ajax/Ajaxlikecomment',
                         '/ajax-correct-comment-mark' => 'ajax/Ajaxcommentmarkcorrect',
+                        '/ajax-post-child-comment' => 'ajax/Ajaxpostchildcomment',
+                        '/ajax-choose-startas' => 'ajax/Ajaxchoosestartas',
+                        '/ajax-follow-user' => 'ajax/Ajaxfollowuser',
+                        '/ajax-get-calender-events' => 'ajax/Ajaxcalendar',
+                        '/ajax-fetch-user-corrections' => 'ajax/Ajaxfetchusercorrections',
                         /* ------------------------------------------------------------- */
                         '<language:\w+>/<controller:\w+>/<id:\d+>' => '<controller>/view',
                         '<language:\w+>/<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',

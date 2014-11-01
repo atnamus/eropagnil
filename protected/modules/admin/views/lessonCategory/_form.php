@@ -30,12 +30,14 @@ $form = $this->beginWidget('CActiveForm', array(
     ?>
     <div class="form-group">  
         <label class="col-md-3 control-label">Stage</label>
-        <div class="checkbox-list">
-            <?php foreach ($stages as $stage) { ?>
-                <label class="checkbox-inline">
-                    <input type="checkbox" name="LessonCategory[lesson_stage_id][]" id="stage_<?php echo $stage->id; ?>" value="<?php echo $stage->id; ?>" <?php echo in_array($stage->id, $selected) ? "checked" : "" ?>> <?php echo $stage->name; ?>
-                </label>
-            <?php } ?>
+        <div class="col-md-9">
+            <div class="checkbox-list">
+                <?php foreach ($stages as $stage) { ?>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="LessonCategory[lesson_stage_id][]" id="stage_<?php echo $stage->id; ?>" value="<?php echo $stage->id; ?>" <?php echo in_array($stage->id, $selected) ? "checked" : "" ?>> <?php echo $stage->name; ?>
+                    </label>
+                <?php } ?>
+            </div>
         </div>
     </div>
     <div class="form-group">
@@ -43,10 +45,10 @@ $form = $this->beginWidget('CActiveForm', array(
         <div class="col-md-9">
             <div class="radio-list">                
                 <label class="radio-inline">
-                    <?php echo $form->radioButton($model, "status", ["value" => 1]) ?> Active
+                    <?php echo $form->radioButton($model, "status", ["value" => 1,'uncheckValue' => null]) ?> Active
                 </label>
                 <label class="radio-inline">
-                    <?php echo $form->radioButton($model, "status", ["value" => 0]) ?> Inactive
+                    <?php echo $form->radioButton($model, "status", ["value" => 0,'uncheckValue' => null]) ?> Inactive
                 </label>
             </div>
             <?php echo $form->error($model, 'status'); ?>

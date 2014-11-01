@@ -27,7 +27,7 @@ class HybridAuthIdentity extends CUserIdentity
  
     function __construct() 
     {
-        $path = Yii::getPathOfAlias('ext.HybridAuth');
+        $path = Yii::getPathOfAlias('ext.hybridauth');
         require_once $path . '/Hybrid/Auth.php';  //path to the Auth php file within HybridAuth folder
  
         $this->config = array(

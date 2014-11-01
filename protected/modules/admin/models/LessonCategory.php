@@ -38,11 +38,9 @@ class LessonCategory extends CActiveRecord {
             array('name, status', 'required'),
             array('status', 'numerical', 'integerOnly' => true),
             array('name', 'length', 'max' => 50, 'min' => 1),
-            ['name', 'unique'],
-            // The following rule is used by search().
-            // Please remove those attributes that should not be searched.
+            array('name', 'unique'),
             array('id, name, status', 'safe', 'on' => 'search'),
-            array('lesson_stage_id', 'safe'),
+            array('lesson_stage_id,status', 'safe'),
         );
     }
 

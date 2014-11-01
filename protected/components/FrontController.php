@@ -8,6 +8,7 @@ class FrontController extends CController {
     public $username = "";
     public $default_profile_pic = "default-avatar.jpg";
     public $profile_pic;
+    public $user_type_id;
     public $first_name = "";
     public $last_name = "";
     public $full_name = "";
@@ -16,9 +17,56 @@ class FrontController extends CController {
     public $profile_image_path;
     private $all_function;
     public $page_name;
-    public $page_meta_title="Lingapore";
+    public $page_meta_title = "Lingapore";
     public $page_meta_keywords;
     public $page_meta_description;
+
+    public function __construct($id, $module = null) {
+        parent::__construct($id, $module);
+        $this->profile_pic = $this->default_profile_pic;
+        // If there is a post-request, redirect the application to the provided url of the selected language 
+        if (isset($_POST['language'])) {
+            $lang = $_POST['language'];
+            $MultilangReturnUrl = $_POST[$lang];
+            $this->redirect($MultilangReturnUrl);
+        }
+
+        $this->image_path = Yii::app()->request->getBaseUrl(true) . "/themes/frontend/assets/images";
+        $this->profile_image_path = Yii::app()->request->getBaseUrl(true) . "/uploads/images/profile_pic";
+
+        $assets_url = $this->getAssetsUrl();
+        Assets::init([
+            'assets_url' => $assets_url,
+            'theme' => 'frontend',
+            'package_path' => 'vendor',
+            'js_path' => 'js',
+            'css_path' => 'css',
+        ]);
+        
+        // Set the application language if provided by GET, session or cookie
+        if (isset($_GET['language'])) {
+            Yii::app()->language = $_GET['language'];
+            Yii::app()->user->setState('language', $_GET['language']);
+            $cookie = new CHttpCookie('language', $_GET['language']);
+            $cookie->expire = time() + (60 * 60 * 24 * 365); // (1 year)
+            Yii::app()->request->cookies['language'] = $cookie;
+        } else if (Yii::app()->user->hasState('language'))
+            Yii::app()->language = Yii::app()->user->getState('language');
+        else if (isset(Yii::app()->request->cookies['language']))
+            Yii::app()->language = Yii::app()->request->cookies['language']->value;
+
+        $lang_code = "en";
+
+        $lang_code = Yii::app()->language;
+
+        $lang = Languages::model()->findByAttributes(array("code" => $lang_code));
+
+        if (!empty($lang)) {
+            Yii::app()->session['language'] = $lang->id;
+        }
+
+        $this->all_function = new AllFunction();
+    }
 
     public function beforeAction($action) {
         $languages = Languages::model()->findAllByAttributes(array("status" => "1"));
@@ -33,14 +81,13 @@ class FrontController extends CController {
             $this->language_id = Yii::app()->session['language'];
         }
 
-        $this->language_id=1;
-        
+        $this->language_id = 1;
 
         if (Yii::app()->user->hasState("user")) {
             $this->user_id = Yii::app()->user->getState("user");
 
             $criteria = new CDbCriteria();
-            $criteria->select = "t.profile_image,t.username,t.first_name,t.last_name,t.full_name";
+            $criteria->select = "t.profile_image,t.username,t.first_name,t.last_name,t.full_name,t.user_type_id";
             $criteria->addCondition("t.id='" . $this->user_id . "'");
 
             $user_info = User::model()->find($criteria);
@@ -50,6 +97,7 @@ class FrontController extends CController {
             }
 
             $this->username = $user_info->username;
+            $this->user_type_id = $user_info->user_type_id;
             $this->first_name = $user_info->first_name;
             $this->last_name = $user_info->last_name;
             $this->full_name = $user_info->full_name;
@@ -103,7 +151,7 @@ class FrontController extends CController {
 
     function loadJs($js, $to_end = CClientScript::POS_END) {
         if (is_array($js)) {
-            foreach($js as $key=>$val){
+            foreach ($js as $key => $val) {
                 Yii::app()->clientScript->registerScriptFile($this->_assetsUrl . '/js/' . $val, $to_end);
             }
         } else {
@@ -113,7 +161,7 @@ class FrontController extends CController {
 
     function loadCss($css) {
         if (is_array($css)) {
-            foreach($css as $key=>$val){
+            foreach ($css as $key => $val) {
                 Yii::app()->clientScript->registerCssFile($this->_assetsUrl . '/css/' . $val);
             }
         } else {
@@ -137,46 +185,6 @@ class FrontController extends CController {
         return $this->getAssetsUrl() . '/images/' . $file;
     }
 
-    public function __construct($id, $module = null) {
-        parent::__construct($id, $module);
-        $this->profile_pic=$this->default_profile_pic;
-        // If there is a post-request, redirect the application to the provided url of the selected language 
-        if (isset($_POST['language'])) {
-            $lang = $_POST['language'];
-            $MultilangReturnUrl = $_POST[$lang];
-            $this->redirect($MultilangReturnUrl);
-        }
-
-        $this->image_path=Yii::app()->request->getBaseUrl(true)."/themes/frontend/assets/images";
-        $this->profile_image_path=Yii::app()->request->getBaseUrl(true)."/uploads/images/profile_pic";
-
-        $this->getAssetsUrl();
-
-        // Set the application language if provided by GET, session or cookie
-        if (isset($_GET['language'])) {
-            Yii::app()->language = $_GET['language'];
-            Yii::app()->user->setState('language', $_GET['language']);
-            $cookie = new CHttpCookie('language', $_GET['language']);
-            $cookie->expire = time() + (60 * 60 * 24 * 365); // (1 year)
-            Yii::app()->request->cookies['language'] = $cookie;
-        } else if (Yii::app()->user->hasState('language'))
-            Yii::app()->language = Yii::app()->user->getState('language');
-        else if (isset(Yii::app()->request->cookies['language']))
-            Yii::app()->language = Yii::app()->request->cookies['language']->value;
-
-        $lang_code = "en";
-
-        $lang_code = Yii::app()->language;
-
-        $lang = Languages::model()->findByAttributes(array("code" => $lang_code));
-
-        if (!empty($lang)) {
-            Yii::app()->session['language'] = $lang->id;
-        }
-        
-        $this->all_function=new AllFunction();
-    }
-
     public function createMultilanguageReturnUrl($lang = 'en') {
         if (count($_GET) > 0) {
             $arr = $_GET;
@@ -184,19 +192,19 @@ class FrontController extends CController {
         }
         else
             $arr = array('language' => $lang);
-        return $this->createUrl('', $arr);
+        return $this->createUrl('
+
+        ', $arr);
     }
-    
-    function set_page_seo($page_name)
-    {
-        $this->page_name=$page_name;
-        $seo = Seo::model()->findByAttributes(array("page_name"=>$this->page_name,"language_id"=>$this->language_id));
-        
-        if($seo!=null)
-        {
-            $this->page_meta_title=$seo->title;
-            $this->page_meta_keywords=$seo->keyword;
-            $this->page_meta_description=$seo->description;
+
+    function set_page_seo($page_name) {
+        $this->page_name = $page_name;
+        $seo = Seo::model()->findByAttributes(array("page_name" => $this->page_name, "language_id" => $this->language_id));
+
+        if ($seo != null) {
+            $this->page_meta_title = $seo->title;
+            $this->page_meta_keywords = $seo->keyword;
+            $this->page_meta_description = $seo->description;
         }
     }
 
