@@ -32,7 +32,7 @@ return array(
           'autoUpdateFlash' => false,
           ), */
         'imagemod' => array(
-//alias to dir, where you unpacked extension
+            //alias to dir, where you unpacked extension
             'class' => 'application.extensions.imagemodifier.CImageModifier',
         ),
         'user' => array(// Webuser for the frontend
@@ -82,10 +82,15 @@ return array(
                     'class' => 'CFileLogRoute',
                     'levels' => 'error, warning',
                 ),
+                array(
+                    'class' => 'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
+                ),
             // uncomment the following to show log messages on web pages
-            // array(
-            //     'class' => 'CWebLogRoute',
-            // ),
+            /*
+              array(
+              'class'=>'CWebLogRoute',
+              ),
+             */
             ),
         ),
     ),

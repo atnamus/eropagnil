@@ -292,10 +292,7 @@ class UserController extends FrontController {
         }
     }
 
-    public function getKey($email) {
-        $generatedKey = sha1(mt_rand(10000, 99999) . time() . $email);
-        return $generatedKey;
-    }
+    
 
     public function actionSocialLogin() {
 //        Yii::import('components.HybridAuthIdentity');

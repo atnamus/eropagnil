@@ -2149,3 +2149,14 @@ span.file_cross.audio_delete { display:block; }
 .modal-header h4{ color:#fff; font-size:25px; font-weight:bold;}
 
 .modal-body{}
+
+.child-listing{ overflow:hidden;}
+.child-listing label{ width:49%; float:left; text-align:right; margin-right:10px;}
+.child-listing .set_btn{ width:50%; float:left;}
+
+
+
+
+
+
+

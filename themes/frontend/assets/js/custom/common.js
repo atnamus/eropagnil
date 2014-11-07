@@ -15,9 +15,15 @@ $.extend(true, $.simplyToast.defaultOptions,
             allowDismiss: true,
             spacing: 100
         });
-$(document).ready(function() {    
+$(document).ready(function() {
+    $("form.ajax-submit").submit(function() {
+
+    });
     $("form.ajax-submit").submit(function(event) {
         event.preventDefault();
+        console.log('i am hit...');
+        var l = $(this).find('.ladda-button').ladda();
+        l.ladda('start');
         var $form = $(this),
                 data = $form.serialize(),
                 url = $form.attr("action");
@@ -30,7 +36,8 @@ $(document).ready(function() {
         request.done(function(data) {
             $(".msg").html('');
             $(".has-error").removeClass('has-error');
-            if (data.fail) {
+            if (data.ok == 1) {
+                type = 'success';
                 /*$.each(data.errors, function(index, value) {
                  row = $("input[name='" + index + "']").closest("div.form-group");
                  if (!row.length) {
@@ -39,18 +46,26 @@ $(document).ready(function() {
                  row.addClass("has-error");
                  row.find(".msg").html("<span class='help-inline'>" + value + "</span>");
                  });*/
-            }//has error
-            if (data.success) {
-                //Admin.ShowSuccess(data.message);
-                // if (_method !== 'PUT')
-                // $form[0].reset();
+            } else {//has error
+                type = 'warning';
+            }
+            if (data.ok == 1) {
+                if ($form.data('reset') !== undefined && $form.data('reset'))
+                    $form[0].reset();
+
+                var fn = window[$form.data('after-success')];
+                if (typeof fn === "function")
+                    fn($form, data);
+                //list
             } //success
+            $.simplyToast(data.msg, type);
         }); //done
         request.always(function() {
-
+            l.ladda('stop');
         });
         request.fail(function() {
-            alert("error");
+
+
         });
     });
 

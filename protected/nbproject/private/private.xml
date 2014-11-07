@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="2">
+        <file>
+            <url>protected/views/frontend/correction_details.php</url>
+            <bookmark id="2">
+                <name/>
+                <line>308</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/M:/public/protected/components/FrontController.php</file>
+        <file>file:/M:/public/protected/components/helper/Assets.php</file>
+        <file>file:/M:/public/protected/controllers/frontend/OrganizationController.php</file>
+        <file>file:/M:/public/protected/views/frontend/organization/tab/linked-accounts.php</file>
+        <file>file:/M:/public/protected/components/helper/assets.packages.php</file>
+    </open-files>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/Z:/public/protected/views/frontend/correction_details.php</file>
+            <file>file:/Z:/public/protected/controllers/frontend/CorrectionController.php</file>
+            <file>file:/Z:/public/themes/frontend/assets/js/custom/correction.js</file>
+            <file>file:/Z:/public/protected/config/front-config.php</file>
+            <file>file:/Z:/public/protected/controllers/frontend/AjaxController.php</file>
+            <file>file:/Z:/public/protected/models/CorrectionComments.php</file>
+            <file>file:/Z:/public/protected/models/UserCorrection.php</file>
+            <file>file:/Z:/public/themes/frontend/assets/css/style.css</file>
+        </group>
+    </open-files>
+</project-private>

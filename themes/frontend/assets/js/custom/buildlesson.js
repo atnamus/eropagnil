@@ -407,6 +407,36 @@ $(document).ready(function(e) {
                 }
             }
         });
+        but = $(".modal-footer").find('button');
+        but.css({'margin-right': '5px'});
+        but.eq(0).data({
+            toogle: 'popover',
+            placement: 'top',
+            content: 'Save current data and exit from build lession.',
+            'original-title': 'Info'
+        });
+        but.eq(1).data({
+            toogle: 'popover',
+            placement: 'top',
+            content: 'Save current data and provide facility to add new.',
+            'original-title': 'Info'
+        });
+        but.eq(2).data({
+            toogle: 'popover',
+            placement: 'top',
+            content: 'I have completed the build lession.',
+            'original-title': 'Info'
+        });
+        but.eq(3).data({
+            toogle: 'popover',
+            placement: 'top',
+            content: 'I want to change somthing in current page.',
+            'original-title': 'Info'
+        });
+        /*but.hover(function() {
+            $(this).css({'margin-right': '5px'});
+        });*/
+        but.popover({trigger: 'hover', placement: 'top'});
     });
 
     $("#create_skit_step2").click(function(e) {
@@ -859,7 +889,7 @@ function create_update_skit(hide_div, show_div) {
 function create_update_quiz(hide_div, show_div) {
     var error_msg = "";
     var answer_checked = $(".chkbox:checked").length;
-    var value_present=false;
+    var value_present = false;
     //    console.debug(answer_checked);
 
     $(".answer_holder").css("border", "solid 1px #ececec");
@@ -869,10 +899,10 @@ function create_update_quiz(hide_div, show_div) {
         error_msg = "Please enter Image or Audio or Text for question";
         $(".question_holder").css("border", "solid 1px brown");
     } else if (answer_checked == 0) {
-        value_present=true;
+        value_present = true;
         error_msg = "Please select correct answer(s) from the checkboxes at the right";
     } else {
-        value_present=true;
+        value_present = true;
         var checked_elements = $(".chkbox:checked");
         var all_found = true;
         $.each(checked_elements, function(index, elem) {
@@ -889,9 +919,9 @@ function create_update_quiz(hide_div, show_div) {
 
     if (error_msg != "" && validate_form == true) {
         showJsError(error_msg);
-    } else if (error_msg != "" && value_present==true && validate_form == false) {
+    } else if (error_msg != "" && value_present == true && validate_form == false) {
         showJsError(error_msg);
-    } else if (error_msg != "" && value_present==false && validate_form == false) {
+    } else if (error_msg != "" && value_present == false && validate_form == false) {
         $("#question_form")[0].reset();
         $(".file_name_holder").html("");
         $(".audio_name,.image_name").val("");

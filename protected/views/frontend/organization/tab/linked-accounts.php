@@ -14,8 +14,6 @@ $google_acc = SocialAccount::model()->find($criteria2);
 <div class="row">
     <div class="col-sm-12">
         <!-- Tab panes -->
-        <div style="color: red;display: block;text-align: center;" id="error">dfdf</div>
-        <div style="color: green;display: block;text-align: center;" id="success">df</div>
         <h3>These linked accounts can be used to log in to lingapore</h3>
         <div class="accEdit linkdin-sec">
             <form class="basics-form">
@@ -49,16 +47,16 @@ $google_acc = SocialAccount::model()->find($criteria2);
                     <label class="col-sm-3 control-label" for="User_full_name"><i class="fa fa-envelope"></i> Email</label>
                     <div class="col-sm-9"><?php echo $model->email; ?></div>
                 </div>
-
-                <div class="form-group">
-                    <div class="col-sm-offset-3 col-sm-10">                        
-                        <button class="btn-submit-gray" type="submit">Connect another email</button>
-                    </div>                
-                </div>
+                <!--                <div class="form-group">
+                                    <div class="col-sm-offset-3 col-sm-10">                        
+                                        <button class="btn-submit-gray" type="submit">Connect another email</button>
+                                    </div>                
+                                </div>-->
             </form>            
         </div>
         <!-- Tab panes -->
     </div> 
 </div>  
 <?php
-$this->loadJs(["hello.all.min.js", 'custom/organization.js']);
+Assets::loadPlugin('hello');
+$this->loadJs(['custom/organization.js']);

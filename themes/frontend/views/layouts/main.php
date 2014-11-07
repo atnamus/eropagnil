@@ -24,7 +24,7 @@
                 '66.23.235.244': '733597033376139',
                 'lingapore.com': ''
             }[window.location.hostname];
-            var GOOGLE_CLIENT_ID = '656984324806-sr0q9vq78tlna4hvhlmcgp2bs2ut8uj8.apps.googleusercontent.com';
+            var GOOGLE_CLIENT_ID = '145654249922-ni0tpq6748ae4njf3qn0rbbuldgfhhi0.apps.googleusercontent.com';
             var CLIENT_IDS = {
                 google: GOOGLE_CLIENT_ID,
                 facebook: FACEBOOK_CLIENT_ID

@@ -42,9 +42,10 @@ class Assets {
             if (isset($package['js'])) {
                 //check multiple js or single file                
                 if (is_array($package['js'])) {
+                    $pos = isset($package['pos']) ? $package['pos'] : CClientScript::POS_END;
                     foreach ($package['js'] as $jsFile) {
                         if ($jsFile != '') {
-                            self::loadJsFile($_path . $jsFile);
+                            self::loadJsFile($_path . $jsFile, $pos);
                         }
                     }
                 } elseif ($package['js'] != '') {

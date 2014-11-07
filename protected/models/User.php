@@ -26,7 +26,7 @@
  * The followings are the available model relations:
  * @property UserType $userType
  */
-class User extends CActiveRecord {
+class User extends FrontModel {
 
     const ACTIVE = 1;
     const INACTIVE = 0;
@@ -61,7 +61,7 @@ class User extends CActiveRecord {
             array('full_name,gender,language_id', 'required', 'on' => 'settings_update'),
             array('username, email,password', 'required', 'on' => 'signup'),
 //            array('email', 'email','message'=>"Invalid email address", 'on' => 'signup'),
-            array('full_name,username, email,password,confirm_password,user_type_id, birthday, gender, language_id, profile_image, membership_id, activation_code, reset_key, create_at, update_at', 'required', 'on' => 'other'),
+            array('full_name,username, email,password,confirm_password,user_type_id, birthday, gender, language_id, profile_image, membership_id, activation_code, reset_key', 'required', 'on' => 'other'),
             array('username', 'checkUserName', 'on' => 'signup'),
             array('email', 'email', 'on' => 'signup'),
             array('email', 'checkEmail', 'on' => 'signup'),
@@ -78,7 +78,7 @@ class User extends CActiveRecord {
             array('id, username, email, user_type_id, password, full_name, birthday, gender, language_id, profile_image, sound_effect, microphone, speaker, activation_code, reset_key, status, create_at, update_at', 'safe', 'on' => 'search'),
             array('old_password', 'required', 'on' => 'changePwd'),
             array('old_password', 'findPasswords', 'on' => 'changePwd'),
-             array('new_password', 'required', 'on' => 'changePwd'),
+            array('new_password', 'required', 'on' => 'changePwd'),
             array('repeat_password', 'compare', 'compareAttribute' => 'new_password', 'on' => 'changePwd'),
         );
     }
@@ -99,6 +99,7 @@ class User extends CActiveRecord {
         // class name for the relations automatically generated below.
         return array(
             'userType' => array(self::BELONGS_TO, 'UserType', 'UserTypeId'),
+            'child' => array(self::HAS_MANY, 'Child', 'parent_id'),
             'blogcomments' => array(self::HAS_MANY, 'BlogComment', 'author_id'),
             'blogCommentCount' => array(self::STAT, 'BlogComment', 'author_id', 'condition' => 'status=' . BlogComment::STATUS_PUBLISHED));
     }

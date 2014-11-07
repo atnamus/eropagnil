@@ -48,7 +48,7 @@
                         </div>
                         <div class="tab-pane fade" id="child-accounts">
                             <div class="my-lession corrections-tab">
-                                <?php echo $this->renderPartial("/organization/tab/child-accounts", ['model' => $model]); ?>              
+                                <?php echo $this->renderPartial("/organization/tab/child-accounts", ['model' => $child_model,'parent'=>$model]); ?>              
                             </div>
                         </div>
                         <div class="tab-pane fade" id="profile-information">
@@ -72,3 +72,5 @@
         </div>
     </div>
 </div>
+<?php
+Assets::loadPlugin('birthday-picker');

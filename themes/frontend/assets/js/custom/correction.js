@@ -1,5 +1,5 @@
 function fetch_events(month, year) {
-    show_js_loader(true);
+    //show_js_loader(true);
     var curr_month = month;
     var curr_year = year;
     $.ajax({
@@ -11,7 +11,7 @@ function fetch_events(month, year) {
             user_id: $("#calendar_user_id").val()
         },
         success: function(response) {
-            show_js_loader(false);
+            //show_js_loader(false);
             $("#calendar_holder").html(response);
         }
     });
@@ -55,6 +55,11 @@ function get_user_corrections()
 }
 
 $(document).ready(function() {
+    $(".go_to_correct_area a.com-cor-btn").click(function(e) {
+        e.preventDefault();
+        $("#correc-comm-araea").show();
+        $("#main_comment_box").focus();
+    });
 //
 //    $(window).scroll(function() {
 //        if ($(window).scrollTop() + $(window).height() == $(document).height()) {
@@ -96,7 +101,7 @@ $(document).ready(function() {
 
 //                $("#modal_body").getNiceScroll().remove();
 //                $("#modal_body").niceScroll({cursorcolor: "#FFAA66", cursorborderradius: "10px", cursorwidth: 10,railoffset:true});
-                 $("#modal_body").scrollTop(0);
+                $("#modal_body").scrollTop(0);
             }
         });
     });
@@ -346,7 +351,7 @@ $(document).ready(function() {
 
         if ($.trim($(THIS).val()) != "") {
             show_js_loader(true);
-            var comment=$(THIS).val();
+            var comment = $(THIS).val();
             $(THIS).val("");
             $.ajax({
                 url: full_path + "/ajax-post-child-comment",

@@ -15,13 +15,13 @@
                 $(".create-account-form").fadeIn("fast");
             });
         });
-        
+
         $("#go_back").click(function(e) {
             e.preventDefault();
             var state = {
                 "currentStates": true
             };
-            
+
             history.replaceState(state, "Lingapore", "");
             history.back();
 
@@ -34,8 +34,8 @@
                 $(".create-account-type").fadeIn("fast");
             });
         });
-        
-        
+
+
     });
 </script>
 <div class="account-wrap">
@@ -69,30 +69,28 @@
     if ($user_type == "") {
         echo "display:none;";
     }
-    $user_type_name="";
-    
-    switch($user_type){
+    $user_type_name = "";
+
+    switch ($user_type) {
         case "learner":
-            $user_type_name="Learner/Guide";
+            $user_type_name = "Learner/Guide";
             break;
-        
+
         case "parent":
-            $user_type_name="Parent";
+            $user_type_name = "Parent";
             break;
-        
+
         case "school":
-            $user_type_name="School";
+            $user_type_name = "School";
             break;
-        
+
         case "company":
-            $user_type_name="Company";
+            $user_type_name = "Company";
             break;
-        
+
         case "business_guide":
-            $user_type_name="Business Guide";
+            $user_type_name = "Business Guide";
             break;
-        
-        
     }
     ?>">
         <div class="container">
@@ -106,32 +104,32 @@
                     'clientOptions' => array('validateOnSubmit' => true, 'afterValidate' => 'js:formValidate', 'beforeValidate' => 'js:show_loader')
                 ));
                 ?>
-                        <?php echo $form->errorSummary($model); ?>
+                <?php echo $form->errorSummary($model); ?>
                 <input type="hidden" name="user_type" id="user_type" value="<?php echo $user_type; ?>" />
                 <div class="form-group">
                     <label for="User_username" class="col-sm-3 control-label">Username*</label>
                     <div class="col-sm-9">
-<?php echo $form->textField($model, 'username', array("class" => "form-control")); ?>
+                        <?php echo $form->textField($model, 'username', array("class" => "form-control")); ?>
                         <span style="display:none;"><?php echo $form->error($model, 'username'); ?></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="User_email" class="col-sm-3 control-label">Email Address*</label>
                     <div class="col-sm-9">
-<?php echo $form->emailField($model, 'email', array("class" => "form-control", "value" => $email)); ?>
+                        <?php echo $form->emailField($model, 'email', array("class" => "form-control", "value" => $email)); ?>
                         <span style="display:none;"><?php echo $form->error($model, 'email'); ?></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="User_password" class="col-sm-3 control-label">Password*</label>
                     <div class="col-sm-9">
-<?php echo $form->passwordField($model, 'password', array("class" => "form-control")); ?>
+                        <?php echo $form->passwordField($model, 'password', array("class" => "form-control")); ?>
                         <span style="display:none;"><?php echo $form->error($model, 'password'); ?></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-10">
-<?php echo CHtml::submitButton('Submit', array("class" => "account-btn", "value" => "Create account")); ?>
+                        <?php echo CHtml::submitButton('Submit', array("class" => "account-btn", "value" => "Create account")); ?>
                         <a href="<?php echo $this->createUrl("user/Signup"); ?>?provider=facebook" class="btn btn-primary sign-facebook">
                             <i class="icon-facebook"></i>Sign Up With Facebook
                         </a>
@@ -147,7 +145,7 @@
                         </label>
                     </div>
                 </div>
-<?php $this->endWidget(); ?>
+                <?php $this->endWidget(); ?>
             </div>
         </div>
     </div>

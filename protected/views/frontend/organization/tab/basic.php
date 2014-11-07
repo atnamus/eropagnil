@@ -2,7 +2,7 @@
 $form = $this->beginWidget('CActiveForm', array(
     'id' => 'account-settings-form',
     'action' => $this->createUrl('o/account-settings'),
-    'htmlOptions' => array('class' => 'basics-form ajax-submit2', "role" => "form", "autocomplete" => "off"),//formValidate
+    'htmlOptions' => array('class' => 'basics-form ajax-submit2', "role" => "form", "autocomplete" => "off"), //formValidate
     'enableAjaxValidation' => true,
     'clientOptions' => array('validateOnSubmit' => true, 'afterValidate' => 'js:formValidate', 'beforeValidate' => 'js:show_loader')
         ));

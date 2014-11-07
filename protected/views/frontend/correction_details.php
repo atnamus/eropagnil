@@ -70,7 +70,7 @@
                             ?>
                         </div>
                         <div class="go_to_correct_area">
-                            <a href="#" class="com-cor-btn">Post comments and corrections</a>                          
+                            <a href="#" class="com-cor-btn"  data-show="false" >Post comments and corrections</a>                          
                         </div>
                     </div>
                     <div id="corrections_comments">
@@ -89,8 +89,8 @@
                                     <div class="single_comment_block">
                                         <div class="cmt_body_bar">
                                             <div class="pull-left cmt_status">
-                                                <a href="<?php echo $this->createUrl("profile/".$com_val['user']->username); ?>" class="user_icon"><img alt="" src="<?php echo $this->profile_image_path . '/' . (($com_val['user']->profile_image != "") ? $com_val['user']->profile_image : $this->default_profile_pic); ?>"></a>
-                                                <a href="<?php echo $this->createUrl("profile/".$com_val['user']->username); ?>" class="user_name"><?php echo $com_val['user']->full_name; ?></a>
+                                                <a href="<?php echo $this->createUrl("profile/" . $com_val['user']->username); ?>" class="user_icon"><img alt="" src="<?php echo $this->profile_image_path . '/' . (($com_val['user']->profile_image != "") ? $com_val['user']->profile_image : $this->default_profile_pic); ?>"></a>
+                                                <a href="<?php echo $this->createUrl("profile/" . $com_val['user']->username); ?>" class="user_name"><?php echo $com_val['user']->full_name; ?></a>
                                             </div>
                                             <div class="pull-right cmt_status2">
                                                 <span class="p_datetime"><?php echo date("M d, Y h:i", strtotime($com_val->create_at)); ?></span>
@@ -205,7 +205,7 @@
                         }
                         ?>
                     </div>
-                    <div class="correct_comment">
+                    <div class="correct_comment" id="correc-comm-araea" style="display: none;">
                         <form action="" method="post" id="correction_comment_form" enctype="multipart/form-data">
                             <input type="hidden" name="correction_id" value="<?php echo $cor_dtls->id; ?>" />
                             <div class="comment_heading">
@@ -245,7 +245,7 @@
                                             </div>
                                             <div class="correction_panel editor_panel" id="correct_editor_panel<?php echo $i; ?>">
                                                 <div class="form-group">
-                                                    <!--<img src="<?php // echo $this->image_path;   ?>/text-editor.png" alt="">-->
+                                                    <!--<img src="<?php // echo $this->image_path;    ?>/text-editor.png" alt="">-->
                                                     <textarea name="corrected_line[]" class="corrected_line"><?php echo $line; ?></textarea>
                                                     <div class='preview_correction_holder'>
 
@@ -294,7 +294,6 @@
                             </div>
                         </form>
                     </div>
-
                 </div>
                 <?php
                 $this->renderPartial("/_correction_right", array("user_id" => $user_id));
@@ -361,7 +360,5 @@
     });
 </script>
 <?php
-$this->loadJs(array(
-    "custom/correction.js",
-));
+$this->loadJs(array("custom/correction.js",));
 ?>

@@ -42,7 +42,7 @@ class FrontController extends CController {
             'js_path' => 'js',
             'css_path' => 'css',
         ]);
-        
+
         // Set the application language if provided by GET, session or cookie
         if (isset($_GET['language'])) {
             Yii::app()->language = $_GET['language'];
@@ -66,6 +66,11 @@ class FrontController extends CController {
         }
 
         $this->all_function = new AllFunction();
+    }
+
+    public function getKey($email) {
+        $generatedKey = sha1(mt_rand(10000, 99999) . time() . $email);
+        return $generatedKey;
     }
 
     public function beforeAction($action) {
@@ -143,9 +148,11 @@ class FrontController extends CController {
      */
     public function getAssetsUrl() {
         Yii::app()->assetManager->forceCopy = true;
-        if ($this->_assetsUrl === null)
-            $this->_assetsUrl = Yii::app()->assetManager->publish(dirname(Yii::app()->basePath) . DIRECTORY_SEPARATOR . 'themes' . DIRECTORY_SEPARATOR . 'frontend' . DIRECTORY_SEPARATOR . 'assets');
-//            $this->_assetsUrl = Yii::app()->assetManager->publish(dirname(Yii::app()->request->baseUrl) . '/public/themes/frontend/assets/');
+        if ($this->_assetsUrl === null) {
+            $this->_assetsUrl = Yii::app()->createAbsoluteUrl('/themes/frontend/assets');//Yii::app()->request->baseUrl . '/themes/frontend/assets/';
+            //$this->_assetsUrl = Yii::app()->assetManager->publish(dirname(Yii::app()->basePath) . DIRECTORY_SEPARATOR . 'themes' . DIRECTORY_SEPARATOR . 'frontend' . DIRECTORY_SEPARATOR . 'assets');
+        }
+        //$this->_assetsUrl = Yii::app()->assetManager->publish(dirname(Yii::app()->request->baseUrl) . '/public/themes/frontend/assets/');
         return $this->_assetsUrl;
     }
 
